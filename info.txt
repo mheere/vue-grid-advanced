@@ -1,0 +1,44 @@
+
+
+git config credential.username 'mheere'
+
+problem:
+[ts] Cannot find name 'require'. (https://stackoverflow.com/questions/31173738/typescript-getting-error-ts2304-cannot-find-name-require)
+solution 1 - quick and dirty ->   declare var require: any
+solution 2 - proper -> npm install @types/node --save-dev
+
+
+problem:
+[ts] 'Map' only refers to a type, but is being used as a value here.
+include in compilerOptions:        "lib": [
+            "es2016"
+        ]
+
+
+problem:
+typescript returns 'object | undefined' - for example when doing a _.find.   This makes sense but we now have to constantly 
+check for undefined also deeper in the code after the check has already been done (in fat-arrow functions)
+solution: 
+    "strictNullChecks": false,
+
+problem:
+window.addEventListener("keydown", function (event: any) {...     [ts] Cannot find name 'window'.
+solution:  "lib": [
+            "es2016", "dom"                     add the "dom"
+        ]   
+
+
+
+ctrl-k to clear the Terminal window....
+
+&nbsp non breaking space
+
+the below will pus something in the grid cell so that line-height WILL work!
+.no-text {
+        content: "&nbsp";
+        visibility: hidden;
+    }
+
+npm-check-updates  (need to have this installed as -g)
+ncu -u      (to update packages)
+npm update

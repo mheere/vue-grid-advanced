@@ -1,0 +1,52 @@
+{
+  "name": "vue-grid-advanced",
+  "version": "0.0.0",
+  "private": true,
+  "description": "An advanced Vue Grid - still under active development... ",
+  "scripts": {
+    "start": "webpack-dev-server --config ./webpack.config.js --color --progress",
+    "create-lib": "webpack --config ./webpack.npm.js --color --progress"
+  },
+  "keywords": [],
+  "author": {
+    "name": "marcel heeremans",
+    "url": "https://github.com/mheere"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.2",
+    "@fortawesome/free-regular-svg-icons": "^5.2.0",
+    "@fortawesome/free-solid-svg-icons": "^5.2.0",
+    "@fortawesome/vue-fontawesome": "^0.1.1",
+    "jquery": "^3.3.1",
+    "jquery-ui": "^1.12.1",
+    "linq": "^3.1.0",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.2",
+    "numeral": "^2.0.6",
+    "ramda": "^0.26.1",
+    "vue": "^2.5.16",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.3.6",
+    "@types/jqueryui": "^1.12.3",
+    "@types/lodash": "^4.14.115",
+    "@types/node": "^10.7.0",
+    "@types/numeral": "0.0.25",
+    "@types/ramda": "^0.25.35",
+    "css-loader": "^2.1.0",
+    "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.9.2",
+    "sass-loader": "^7.0.3",
+    "style-loader": "^0.23.1",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.2.2",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "vue-loader": "^15.5.0",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.21.0",
+    "webpack-cli": "^3.2.0",
+    "webpack-dev-server": "^3.1.9"
+  }
+}

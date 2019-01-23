@@ -1,0 +1,9 @@
+backup/
+lib_to_npm/
+dist/
+dist2/
+node_modules/
+.cache/
+.vscode/
+.npmignore
+package-lock.json

@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": false,
+        "strictNullChecks": false,
+        "types": ["node"],
+        "outDir": "./built/",
+        "sourceMap": true,
+        "strict": false,
+        "module": "es2015",
+        "moduleResolution": "node",
+        "target": "es6",
+        "experimentalDecorators": true,
+        "lib": [
+            "es2016", "dom"
+        ]
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}
