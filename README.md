@@ -256,7 +256,7 @@ Type | Name | args/value (default) | Description |
 
 |version | date | notes |
 | ---- | ------ | ------ |
-v 0.0.3 | 23 Jan 2018 | 
+v 0.0.3 | 23 Jan 2018 | project structure changes - some api updates
 v 0.0.2 | 20 Jan 2018 | minor changes
 v 0.0.1 | 20 Jan 2018 | Initial release - many more features to follow shortly
 
