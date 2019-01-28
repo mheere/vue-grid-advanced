@@ -96,7 +96,8 @@ let vgrid = new VGrid(settings);
 
 // attach a handler so we get informed when the user interacts with the grid
 vgrid.onChanged = (info) => {
-    console.log(`selectedIDValue: ${info.selectedIDValue}`);
+    let col = info.column ? info.column.dbName : "";
+    console.log(`selectedIDValue: ${info.selectedIDValue}, col: ${col}, dblclick: ${info.dblClickedColumn}`);
 };
 
 // -----------------------------------------------------------------------------------------

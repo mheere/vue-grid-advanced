@@ -1,4 +1,4 @@
-import { ICheckboxConverter, CheckboxConverterYN } from './CheckBoxConverter';
+import { ICheckboxConverter, CheckboxConverterYN, CheckboxConverter01234 } from './CheckBoxConverter';
 
 // --------------------------------------------------------
 // Describes all meta regarding a grid column
@@ -45,9 +45,14 @@ export class GridColumn {
     this.format = format;
     this.sortDirection = sortDirection;
 
-    // if this is a checkbox then start with default of YN converter
-     if (this.isCheckbox)
-         this.checkboxConverter = new CheckboxConverterYN();
+    // if this is a boolean start with default Y/N
+    if (this.isBoolean)
+        this.checkboxConverter = new CheckboxConverterYN();
+    
+    // if this is a checkbox start with default 0,1,2,3,4
+    // 0: not shown, 1: shown open, 2: shown ticked, 3: disabled open, 4: disabled ticked
+    if (this.isCheckbox)
+        this.checkboxConverter = new CheckboxConverter01234();
   }
 
   public static create(fromJson: any): GridColumn {

@@ -1,20 +1,16 @@
 
 
 <template>
-    <div ref="mygridcell" class='vg-data-cell' v-bind:style='getStyle' >
+    <div ref="mygridcell" class='vg-data-cell' v-bind:style='getStyle' :data-col='this.colDef.dbName'>
 
         <div v-if="this.colDef.isBoolean|| this.colDef.isCheckbox">
-            <span :class="{ 'no-text': this.noText }" style='flex: 1; order: 1'>
-                <input v-bind:checked="isChecked" type="checkbox"  >
-         
+            <span style='flex: 1; order: 1'>
+                <input v-bind:checked="isChecked" v-bind:disabled="isDisabled" type="checkbox"  >
             </span> 
         </div>
-        <div v-else :class="this.hasText ? 'use-flex-container' : 'use-inline-block'">
-            <!-- <div style='display: flex'> -->
 
-            <!-- <span>{{ getValue }}</span>  -->
-            <!-- v-if="this.text" -->
-            <!-- <span v-if="this.hasText" style='flex: 1; order: 1'>{{ text }}</span>  -->
+        <div v-else :class="this.hasText ? 'use-flex-container' : 'use-inline-block'">
+            
             <span :class="{ 'no-text': this.noText }" style='flex: 1; order: 1'>{{ text }}</span> 
 
             <span v-if="this.isImage" :class="{ 'exp-col': this.isGroupingCol }" v-bind:style='getStyleImg'>
@@ -22,10 +18,6 @@
             </span>
 
         </div>
-
-        <!-- <span :class="getImgClass" v-if="this.isImage" v-bind:style='{color: faImageColour}'>
-            <font-awesome-icon :icon="[this.iconPre, this.iconName]" fa-3x />
-        </span> -->
         
     </div>
 </template>

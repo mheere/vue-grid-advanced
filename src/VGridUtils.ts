@@ -47,13 +47,16 @@ export class SelectRowInfo {
 	public findIDColumn: string = "";
 	public findIDValue: string = "";
 	public moveSelectedRowIntoViewport: boolean = true;
-	public dblClickColumn: string = "";
+	public dblClickedColumn: string = "";
+	public ClickedColumn: string = "";
 
 	get hasModifierKeys() { return this.ctrlKey || this.shiftKey || this.altKey }
 }  
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
+  // This is given to the user and informes it about which row(s) were selected, column clicked,
+  // where the event comes from and a whole lot more!
   export class GridStateInfo {
     public gridKey: string = "";
     public idColumn: string = "";
@@ -68,9 +71,10 @@ export class SelectRowInfo {
     public origin: string = "";                     // what/who caused this change
     public selectedRows: any[] = [];
     public checkedRows: any[] = [];
-    public totalRowCount: number = -1;
+	public totalRowCount: number = -1;
+	public column: GridColumn = undefined;
     public columns: GridColumn[] = [];
-    public dblClickColumn: string = "";             // row was double clicked
+    public dblClickedColumn: string = "";             // row was double clicked
     public gridDisplayMode: string = "";            // what display mode is the grid currently
     public lastAction: string = "";                 // the last formal 'action' given to the store
     //public lastRefData: any = null;                 // the last reference data given by a client widget when invoking an instruction back to the grid

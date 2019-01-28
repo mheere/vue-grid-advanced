@@ -21,6 +21,7 @@ export function getColumns(): GridColumn[] {
 	cols.push(col);
 	cols.push(new GridColumn("optIn", 50, "", "boolean", "center"));
 	cols.push(new GridColumn("checkbox", 50, "cb", "checkbox", "center"));
+	//cols.push(new GridColumn("checkbox", 50, "cb2", "number", "center"));
 	cols.push(new GridColumn("img", 40, "img", "image", "center"));
 	cols.push(new GridColumn("currency", 70, "", "", "center"));
 	col = new GridColumn("valuation", 120, "", "number", "right", "#,##0.00");

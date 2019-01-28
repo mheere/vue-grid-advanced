@@ -33,7 +33,8 @@ function internalCreateStateInfo(state: VGridState): GridStateInfo {
 	//info.contextSub = state.contextSub;
 	// info.origin = state.origin;
 	// info.lastAction = state.lastAction;
-	info.dblClickColumn = state.dblClickColumn;
+	info.dblClickedColumn = state.dblClickedColumn;
+	info.column = state.columns.find(c => c.dbName == state.clickedColumn);
 	info.selectedRow = state.selectedRow;
 	info.selectedPKValue = state.selectedRow ? state.selectedRow.pkvalue : "";
 	info.selectedIDValue = state.selectedRow ? state.selectedRow[idColumn] : "";
@@ -300,7 +301,8 @@ export default function createStore(state: any) {
 				}
 
 				// 
-				state.dblClickColumn = info.dblClickColumn;
+				state.dblClickedColumn = info.dblClickedColumn;
+				state.clickedColumn = info.ClickedColumn;
 
 				// assume a row was given
 				let row = info.row;
@@ -361,7 +363,7 @@ export default function createStore(state: any) {
 					}
 				}
 
-				// raise the onChanged event
+				// Note, this willraise the onChanged event through the use of a watcher!
 				state.gridStateInfo = internalCreateStateInfo(state);
 			},
 			calcRowsToDisplay(state, stuff) {

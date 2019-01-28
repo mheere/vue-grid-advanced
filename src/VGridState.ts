@@ -21,7 +21,8 @@ export class VGridState {
 	public columns: any[] = [];
 	public groupingColumns: string[] = [];
 
-	public dblClickColumn: string = "";				// if given then there was dbl click 
+	public clickedColumn: string = "";
+	public dblClickedColumn: string = "";				// if given then there was dbl click 
 	public isVertScrolling: boolean = false;
 	
 	public rowHeight: number = 24;

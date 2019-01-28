@@ -54,13 +54,12 @@ let CellBase = Vue.extend({
             //return this.text.length == 0; test
         },
         isChecked() {
-            if (this.colDef.isCheckbox) {
-                return c.converterCheckbox.FromDB(this.getRawValue());
-            }
-            if (this.colDef.isBoolean) {
-                return c.converterBoolean.FromDB(this.getRawValue());
-            }
-            return false;
+            if (!this.colDef.checkboxConverter) return false;
+            return this.colDef.checkboxConverter.FromDB(this.getRawValue());
+        },
+        isDisabled() {
+            if (!this.colDef.checkboxConverter) return false;
+            return this.getRawValue() >= 3;
         },
         refresh() {
             return this.$store.state.isRefreshData;
@@ -247,22 +246,23 @@ let CellBase = Vue.extend({
         let clickedRow = (e, isDblClk = false) => {
             // read out the actual rowno
             let rowNo = this._$cell.closest('.vg-row').attr('data-rowno');
-           
+            let coldb = this._$cell.closest('.vg-data-cell').attr('data-col');
+
             // and select it (perhaps part of a range so include alt etc keys)
             let info: SelectRowInfo = new SelectRowInfo();
+            info.ClickedColumn = coldb;
+
             if (isDblClk)
-                info.dblClickColumn = "find out!!";
+                info.dblClickedColumn = coldb;
             info.altKey = e.altKey;
             info.ctrlKey = e.ctrlKey;
             info.shiftKey = e.shiftKey;
             info.rowNo = Number.parseInt(rowNo);
+
+            // tell the store to update itself with the selection
             this.$store.commit("selectRow", info);
 
             // check if we clicked on the group exp/col icon
-            // if ($(e.target.parentElement).hasClass('exp-col')) {
-            //     this.$store.dispatch("setExpandCollapse", rowNo);
-            // }
-
             if (this._$cell.find(".exp-col").length > 0) {
                 this.$store.dispatch("setExpandCollapse", rowNo);
             }
