@@ -51,7 +51,7 @@ let CellBase = Vue.extend({
                 return false;
             }
             return !this.text;
-            //return this.text.length == 0;
+            //return this.text.length == 0; test
         },
         isChecked() {
             if (this.colDef.isCheckbox) {
