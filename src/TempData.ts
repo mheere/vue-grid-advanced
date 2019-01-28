@@ -20,11 +20,13 @@ export function getColumns(): GridColumn[] {
 	col.aggregate = "avg";
 	cols.push(col);
 	cols.push(new GridColumn("optIn", 50, "", "boolean", "center"));
+	cols.push(new GridColumn("checkbox", 50, "cb", "checkbox", "center"));
 	cols.push(new GridColumn("img", 40, "img", "image", "center"));
 	cols.push(new GridColumn("currency", 70, "", "", "center"));
 	col = new GridColumn("valuation", 120, "", "number", "right", "#,##0.00");
 	col.aggregate = "sum";
 	cols.push(col);
+	
 
 	return cols;
 }
@@ -70,6 +72,7 @@ export function createData(newRowCount: number = 500): any[] {
 			row.county = randomEntry(counties);
 			row.currency = randomEntry(currencies);
 			row.optIn = randomNumber(3) == 1 ? "Y" : "N";
+			row.checkbox = randomNumber(5);
 			row.dob = moment().subtract(randomNumber(36500), 'days')
 			row.age = getAge(row.dob);
 			row.updown = randomEntry(arrUpDown);

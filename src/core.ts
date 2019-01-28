@@ -126,8 +126,8 @@ export function getPressedKeys(params: any) {
 
 // A helper class which is called upon for translation from what Mike expects and how the rest of the world interprets data... :)
 export class Converters {
-    public static converterBoolean: __cbc.CheckBoxConverterYN = new __cbc.CheckBoxConverterYN();
-    public static converterCheckbox: __cbc.CheckBoxConverter01234 = new __cbc.CheckBoxConverter01234();
+    public static converterBoolean: __cbc.CheckboxConverterYN = new __cbc.CheckboxConverterYN();
+    public static converterCheckbox: __cbc.CheckboxConverter01234 = new __cbc.CheckboxConverter01234();
 }
 
 export function converterBoolean(s1: string, s2: string, inverse?: boolean) {

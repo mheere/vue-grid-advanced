@@ -4,8 +4,9 @@ import * as R from 'ramda';
 import * as numeral from 'numeral';
 import * as moment from "moment";
 import * as Enumerable from 'linq'
+import { Converters as c } from '../../core';
 import { SelectRowInfo, VGridManager, VGridSettings, CellStyleInfo, GridColumn } from '../../index';
-import { ICheckBoxConverter } from "../../CheckboxConverter";
+import { ICheckboxConverter, CheckboxConverter01234 } from "../../CheckboxConverter";
 
 export class MyData {
     public _$cell: any = null;
@@ -21,6 +22,8 @@ export class MyData {
 let k: any = {};
 k.lastName = "Heeremans";
 export { k };
+
+//let cb01234: ICheckboxConverter = new CheckboxConverter01234();
 
 let CellBase = Vue.extend({
     props: ['rowNo', 'colDef'],
@@ -49,6 +52,15 @@ let CellBase = Vue.extend({
             }
             return !this.text;
             //return this.text.length == 0;
+        },
+        isChecked() {
+            if (this.colDef.isCheckbox) {
+                return c.converterCheckbox.FromDB(this.getRawValue());
+            }
+            if (this.colDef.isBoolean) {
+                return c.converterBoolean.FromDB(this.getRawValue());
+            }
+            return false;
         },
         refresh() {
             return this.$store.state.isRefreshData;
@@ -149,16 +161,16 @@ let CellBase = Vue.extend({
             }
 
             
-            // -slow- if this is a checkbox column then determine the image
-            if (this.colDef.isCheckbox && this.colDef.checkboxConverter) {
-                let conv = this.colDef.checkboxConverter as ICheckBoxConverter;
-                // this.iconPre = "far";
-                // this.iconName = "square";
-                if (conv.FromDB(style.textRaw)) 
-                    this.iconName = "check-square";
-                else
-                    this.iconName = "square";
-            }
+            // // -slow- if this is a checkbox column then determine the image
+            // if (this.colDef.isCheckbox && this.colDef.checkboxConverter) {
+            //     let conv = this.colDef.checkboxConverter as ICheckBoxConverter;
+            //     // this.iconPre = "far";
+            //     // this.iconName = "square";
+            //     if (conv.FromDB(style.textRaw)) 
+            //         this.iconName = "check-square";
+            //     else
+            //         this.iconName = "square";
+            // }
 
             // do some formatting (for numbers)
             if (colDef.isNumber && colDef.isFormatting) {

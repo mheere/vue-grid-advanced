@@ -1,5 +1,5 @@
 // Interface
-export interface ICheckBoxConverter {
+export interface ICheckboxConverter {
 
     // interpret a given value from the data collection (db) and return a true/false to bind to
     FromDB(dbvalue: string): boolean;
@@ -8,7 +8,7 @@ export interface ICheckBoxConverter {
     ToDB(b: boolean): string;
 }
 
-export class CheckBoxConverterYN implements ICheckBoxConverter {
+export class CheckboxConverterYN implements ICheckboxConverter {
 
     FromDB(dbvalue: string) {
         if (dbvalue == "Y") return true;
@@ -22,7 +22,7 @@ export class CheckBoxConverterYN implements ICheckBoxConverter {
     }
 }
 
-export class CheckBoxConverter012 implements ICheckBoxConverter {
+export class CheckboxConverter012 implements ICheckboxConverter {
 
     FromDB(dbvalue: string) {
         if (dbvalue == "1")
@@ -41,7 +41,7 @@ export class CheckBoxConverter012 implements ICheckBoxConverter {
 }
 
 // 0: not shown, 1: shown open, 2: shown ticked, 3: disabled open, 4: disabled ticked
-export class CheckBoxConverter01234 implements ICheckBoxConverter {
+export class CheckboxConverter01234 implements ICheckboxConverter {
 
     FromDB(dbvalue: string) {
         if (dbvalue == "1" || dbvalue == "3")
