@@ -8,16 +8,55 @@ ___
 # Demo
 Have a look at the [demo-page](http://www.vuegrid.marcelheeremans.com) to check it out!
 
-# Using the VGrid
+# A quick look at the VGrid
 
 The grid is written using Vue.js calling upon a number of supporting libraries such as Ramda, Lodash and jQuery.
 The only way to activate the grid is through code as shown in the examples below.  There are simply too many options to use the grid in a 'Vue-like' component.
 
+A simple grid can be created in code like this:
 
-## Define columns
+```javascript
+let settings = new VGridSettings();
+
+// the actual DOM element the grid will be injected into
+settings.el = ".test-grid-1";	
+
+// hand over a set of predefined columns
+settings.columns = getColumns();
+
+// Specifies the column that will be interpreted as the unique ID column. If none exists then leave this blank and a 'pkvalue' will be generated guaranteeing a unique reference for each row. 
+settings.idColumn = "code";
+
+// when the grid is fully constructed the given function is called back
+settings.createdGridStructure = (grid) => {
+    // the grid is ready so create some sample data 
+    let tempData = createData(500);
+    // and pass it to the grid
+    grid.setData(tempData);
+};
+
+// create a new VGrid (based on the settings)
+let vgrid = new VGrid(settings);
+
+// get informed when the user selects a row (or rows)
+vgrid.onChanged = (info) => {
+    console.log(`selectedIDValue: ${info.selectedIDValue}`);
+};
+```
+
+That's all.  
+
+A `VGridSettings` object **has** to be created and passed to the constructor of the VGrid when it is created.  
+This `VGridSettings` object contains all settings and any callbacks the Grid might need whilst it configures itself.
+The above grid settings object specifies the minimum that is required for the grid to function resulting in a grid like the below:
+
+![1.basic.png](http://www.vuegrid.marcelheeremans.com/pics/1_basic.png)
+
+
+## Defining the GridColumns
 First off, we need to tell the grid what columns should be shown. This is done by defining a set of GridColumns that allow each column to set any properties such as alignment, formatting etc.  If no columns are defined before data is passed to the grid it will create a 'best guess' columns for each field it encounters.  
 
-_Note that when defining the columns below we also provide an aggregate position ('average') for the 'age' column._
+_Note that when defining the columns we also provide an aggregate position ('average') for the 'age' column._
 
 
 ```javascript
@@ -40,7 +79,8 @@ static getColumns(): GridColumn[] {
 }
 ```
 
-Create some sample data (the example below requires 'moment' and 'ramda' to be installed) - feel free to use your own!
+## Create some sample data
+Creating some sample data (the example below requires 'moment' and 'ramda' to be installed) - feel free to use your own!
 ```javascript
 static createData(newRowCount: number = 500): any[] {
 
@@ -75,45 +115,34 @@ static createData(newRowCount: number = 500): any[] {
 }
 ```
 
-A simple grid can now be created as such:
+# Last Refresh indicator
+
+The last updated date/time stamp is shown when the `showLastRefreshTime` property is set to true.
+By providing a refresh handler through the `requestFreshData` prop the user can click the 'last refresh' date/time for the data to be refreshed.
+
 
 ```javascript
-let settings = new VGridSettings();
+// shows the label indicating how long the data has been displayed for
+settings.showLastRefreshTime = true;
 
-// the actual DOM element the grid will be injected into
-settings.el = ".test-grid-1";	
+// what to do when the user wishes to refresh by clicking the last refresh date indicator
+settings.requestFreshData = () => {
+    // wait for a little while then provide 1000 new rows
+    setTimeout(() => setData(1000), 700);
 
-// hand over a set of predefined columns
-settings.columns = getColumns();
-
-// Specifies the column that will be interpreted as the unique ID column. If none exists then leave this blank and a 'pkvalue' will be generated guaranteeing a unique reference for each row. 
-settings.idColumn = "code";
-
-// when the grid is fully constructed the given function is called back
-settings.createdGridStructure = (grid) => {
-    // the grid is ready so create some sample data 
-    let tempData = createData(500);
-    // and pass it to the grid
-    grid.setData(tempData);
-};
-
-// create a new VGrid (based on the settings)
-let vgrid = new VGrid(settings);
-
-// get informed when the user selects a row (or rows)
-vgrid.onChanged = (info) => {
-    console.log(`selectedIDValue: ${info.selectedIDValue}`);
-};
+    // if all went well return true else return false (this will update the date/time stamp)
+    return true;		
+}
 ```
-![1.basic.png](http://www.vuegrid.marcelheeremans.com/pics/1_basic.png)
+Now a 'last refresh' indicator is shown.
 
-That's all.  A `VGridSettings` object **has** to be created and passed to the constructor of the VGrid when it is created.  
-This `VGridSettings` object contains all settings and any callbacks the Grid might need whilst it configures itself.
-The above grid settings object specifies the minimum that is required for the grid to function. 
+![3_last_refresh](http://www.vuegrid.marcelheeremans.com/pics/3_last_refresh.png)
 
 
 # Styling Cells
-The grid allows each cell to be individually styled by supplying a handler to the `cellStyling` property on the `VGridSettings`. Each row is styled by the grid according to the column definitions and is then ready to be shown. However, just before they are displayed each cell is allowed to be altered by the user through the given `cellStyling` callback.
+The grid allows each cell to be individually styled by supplying a handler to the `cellStyling` property on the `VGridSettings`. 
+
+Note that each row is initially fully styled by the grid according to the column definitions and the underlying data and is ready to be shown. However, just before they are displayed each cell is allowed to be altered by the user through the given `cellStyling` callback.
 
 An example of styling is show below:
 ```javascript
@@ -155,33 +184,37 @@ This results in a grid that looks like this:
 ![2_styling.png](http://www.vuegrid.marcelheeremans.com/pics/2_styling.png)
 
 
-# Last Refresh indicator
+### The CellStyleInfo exposes the following properties
+Note that for *each cell* a callback is made
+property | purpose | 
+| ---- | ------ | 
+*row* | the data row of this cell |
+*col* | the GridColumn of this cell |
+*style* | the style that will be applied |
+*state* | the Vuex Store this grid is based on |
+*textRaw* | the raw (unformatted text) | 
+*isTotalRow* | are we painting the bottom 'totals' row | 
+*isGroupRow* | are we painting a (sub) totals grouping row | 
+*groupLevel* | the level (depth) of the nested grouping (0 is a normal row, 1 is the level above, 2 one above that, etc.) | 
+*groupCurrencyCode* | the curr code the grouping rows have in common if all the same, else 'mixed' |
+*groupRowCount* | the number of rows in the sub group |
+*rows* | all raw rows that would be shown |
 
-The last updated date/time stamp is shown when the `showLastRefreshTime` property is set to true.
-By providing a refresh handler through the `requestFreshData` prop the user can click the 'last refresh' date/time for the data to be refreshed.
+Below are the properties that can be overwritten and will adjust the final styling of the cell.
+property | purpose | 
+| ---- | ------ | 
+*backgroundColor* | the background colour of the cell |
+*color* | the text colour of the cell |
+*faImage* | the font-awesome image the cell needs to show - the image will be placed opposite from the text (i.e. if the text is left aligned, the image will be right-aligned) |
+*faImageColour* | the colour of the above fa image | 
+*textDisplay* | the text that will be shown | 
 
 
-```javascript
-// shows the label indicating how long the data has been displayed for
-settings.showLastRefreshTime = true;
-
-// what to do when the user wishes to refresh by clicking the last refresh date indicator
-settings.requestFreshData = () => {
-    // wait for a little while then provide 1000 new rows
-    setTimeout(() => setData(1000), 700);
-
-    // if all went well return true else return false (this will update the date/time stamp)
-    return true;		
-}
-```
-Now a 'last refresh' indicator is shown.
-
-![3_last_refresh](http://www.vuegrid.marcelheeremans.com/pics/3_last_refresh.png)
 
 
-# Beefed up grid
+# More image styling
 
-The following examples show the grid performing a few more features such as 'image' column where a font-awesome raw data is transformed and shown as the actual iamge.
+The following examples show the grid performing a few more features such as using an 'image' column that displays font-awesome codes and use these to show the actual iamge.
 
 
 ```javascript
@@ -211,24 +244,52 @@ settings.cellStyling = (style: CellStyleInfo) => {
 
 The grid supports grouping through the UI but also programmatically.  
 
-Through the UI is a standard 'drag/drop' to the grouping bar as shown:
+The UI provides a standard 'drag/drop' to the grouping bar (made visible by using the cog icon):
 
 ![5_double_grouping.png](http://www.vuegrid.marcelheeremans.com/pics/5_double_grouping_header.png)
 
 Or we can group through code by simply calling `setGroupColumns` handing an array of columns to group on.  This can be helpful by not allowing the user to alter the groups set through code.
 
 ```javascript
-// once the grid is created we can 'group' on any column...
+// once the grid is created we can 'group' on any column
 vgrid.setGroupColumns(['currency', 'county'])
 ```
 ![5_double_grouping.png](http://www.vuegrid.marcelheeremans.com/pics/5_double_grouping.png)
 
-# Multi Row Select
+# Selecting rows
 
 By settings `allowRowMultiSelect` property to true one can select a range of rows. Each time the selection changes the `onChanged` handler is called.
 
 ![5_double_grouping.png](http://www.vuegrid.marcelheeremans.com/pics/6_multi_select.png)
 
+When a row is selected (or any activity has taken place to the grid) it will raise the `onChanged` event.
+This event provides a `GridStateInfo` object that informs the user a plethora of information about the grid. Not only will it tell which row was clicked but it provides a list of 'checked' items, 'selected' rows, the column the click to place in whether it was as a result of a double click and much more.
+
+```javascript
+// get informed when the user selects a row (or rows)
+vgrid.onChanged = (info: GridStateInfo) => {
+    console.log(`selectedIDValue: ${info.selectedIDValue}`);
+};
+```
+### The GridStateInfo exposes the following 
+property | purpose | 
+| ---- | ------ | 
+*idColumn* |  |
+*context* |  |
+*contextSub* |  |
+*isGroupHeader* |  |
+*groupLevel* |  |
+*selectedPKValue* | the selected pkValue |
+*selectedIDValue* | the selected IDValue (based on the idColumn) |
+*selectedRow* | the selected rowitem |
+*selectedRowHasChanged* | has the rowItem changed from the last time we raised? |
+*origin* | what/who caused this event being raised |
+*selectedRows* |  |
+*checkedRows* |  |
+*totalRowCount* |  |
+*column* |  |
+*dblClickedColumn* | row was double clicked |
+*gridDisplayMode* | ** coming up ** |
 
 ___
 ## VGridSettings - essential properties
@@ -261,4 +322,7 @@ v 0.0.2 | 20 Jan 2018 | minor changes
 v 0.0.1 | 20 Jan 2018 | Initial release - many more features to follow shortly
 
 
+# A quick first look
+The sample grid below is configured to group by 'currency' and average the 'age' and total the 'valuation' columns.
 
+![0.demo2.png](http://www.vuegrid.marcelheeremans.com/pics/0_demo2.png)
