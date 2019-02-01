@@ -28,7 +28,7 @@ export class VGrid {
 				this.onChanged(newV);
 		})
 
-		// if the user wishes to see the last refrehs time then start the interval
+		// if the user wishes to see the last refresh time then start the interval
 		if (settings.showLastRefreshTime)
 			this.startLastDataRefresh();
 	}

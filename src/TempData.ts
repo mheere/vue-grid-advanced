@@ -4,6 +4,10 @@ import * as moment from 'moment';
 import * as R from 'ramda';
 import { GridColumn } from './index';
 
+// helper functions
+export let getRandomArrayEntry = (arr: string[]): string => arr[Math.floor(Math.random() * arr.length)];
+export let getRandomNumber = (max: number, min: number = 0) => Math.floor(Math.random() * (max - min + 1) ) + min;
+
 // Returns a set of columns that we can hand over to the grid
 export function getColumns(): GridColumn[] {
 
@@ -27,7 +31,6 @@ export function getColumns(): GridColumn[] {
 	col = new GridColumn("valuation", 120, "", "number", "right", "#,##0.00");
 	col.aggregate = "sum";
 	cols.push(col);
-	
 
 	return cols;
 }
@@ -55,10 +58,6 @@ let currencies = ["USD", "GBP", "EUR", "AUD"];
 let arrImages = ["coffee", "cog", "database", "o-square", "o-plus-square", "circle", "o-circle"];
 let arrUpDown = ["arrow-circle-down", "arrow-circle-up"];
 
-// helper functions
-let randomEntry = (arr: string[]): string => arr[Math.floor(Math.random() * arr.length)];
-let randomNumber = (n) => Math.floor((Math.random() * n));
-
 // create sample data given a number of rows to create
 export function createData(newRowCount: number = 500): any[] {
 
@@ -68,17 +67,17 @@ export function createData(newRowCount: number = 500): any[] {
 			var row: any = {};
 			row.index = i;
 			row.code = "Code" + i.toString();
-			row.firstname = randomEntry(firstNames);
-			row.lastname = randomEntry(lastNames);
-			row.county = randomEntry(counties);
-			row.currency = randomEntry(currencies);
-			row.optIn = randomNumber(3) == 1 ? "Y" : "N";
-			row.checkbox = randomNumber(5);
-			row.dob = moment().subtract(randomNumber(36500), 'days')
+			row.firstname = getRandomArrayEntry(firstNames);
+			row.lastname = getRandomArrayEntry(lastNames);
+			row.county = getRandomArrayEntry(counties);
+			row.currency = getRandomArrayEntry(currencies);
+			row.optIn = getRandomNumber(3) == 1 ? "Y" : "N";
+			row.checkbox = getRandomNumber(5);
+			row.dob = moment().subtract(getRandomNumber(36500), 'days')
 			row.age = getAge(row.dob);
-			row.updown = randomEntry(arrUpDown);
-			row.valuation = randomNumber(10000);
-			row.img = randomEntry(arrImages);
+			row.updown = getRandomArrayEntry(arrUpDown);
+			row.valuation = getRandomNumber(10000);
+			row.img = getRandomArrayEntry(arrImages);
 			return row;
 	}
 
