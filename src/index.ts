@@ -35,6 +35,6 @@ export { GridStateInfo, VGridSettings, SelectRowInfo, UpdateRowInfo, FindRowInfo
 export { VGrid } from './VGrid';
 export { VGridManager } from './VGridManager';
 export { GridColumn } from './GridColumns';
-export { getColumns, createData } from './TempData';
+export { getColumns, createData, getRandomArrayEntry, getRandomNumber } from './TempData';
 
 

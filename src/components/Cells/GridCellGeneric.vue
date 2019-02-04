@@ -3,10 +3,12 @@
 <template>
     <div ref="mygridcell" class='vg-data-cell' v-bind:style='getStyle' :data-col='this.colDef.dbName'>
 
-        <div v-if="this.colDef.isBoolean|| this.colDef.isCheckbox">
-            <span style='flex: 1; order: 1'>
-                <input v-bind:checked="isChecked" v-bind:disabled="isDisabled" type="checkbox"  >
-            </span> 
+        <div v-if="blankCell" style='flex: 1; order: 1' class="use-inline-block">
+            
+        </div>
+
+        <div v-else-if="this.colDef.isBoolean|| this.colDef.isCheckbox" style='flex: 1; order: 1'>
+            <input v-model="isChecked" v-bind:disabled="canEdit" type="checkbox"  >
         </div>
 
         <div v-else :class="this.hasText ? 'use-flex-container' : 'use-inline-block'">
@@ -51,6 +53,13 @@ export default Vue.extend({
         color: #2a3e6d;
         :hover {
             color: #9e2a2a;;
+        }
+    }
+
+    .vg-data-cell {
+
+        input {
+            vertical-align: middle;
         }
     }
 </style>

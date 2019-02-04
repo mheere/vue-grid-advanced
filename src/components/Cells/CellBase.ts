@@ -16,6 +16,8 @@ export class MyData {
     public iconPre: string = "far";
     public iconName: string = "window-minimize";
     public text: string = "";
+    public canEdit: boolean = false;
+    public blankCell: boolean = false;
 }
 
 //let k = 12;
@@ -53,9 +55,21 @@ let CellBase = Vue.extend({
             return !this.text;
             //return this.text.length == 0; test
         },
-        isChecked() {
-            if (!this.colDef.checkboxConverter) return false;
-            return this.colDef.checkboxConverter.FromDB(this.getRawValue());
+        isChecked: {
+            //if (!this.colDef.checkboxConverter) return false;
+            //return this.colDef.checkboxConverter.FromDB(this.getRawValue());
+            // getter
+            get: function () {
+                if (!this.colDef.checkboxConverter) return false;
+                return this.colDef.checkboxConverter.FromDB(this.getRawValue());
+            },
+            // setter
+            set: function (newValue) {
+                let row = this.$store.state.rowsPrepared[this.rowNo];
+                if (!row) return "";
+                row[this.colDef.dbName] = this.colDef.checkboxConverter.ToDB(newValue);
+            }
+      
         },
         isDisabled() {
             if (!this.colDef.checkboxConverter) return false;
@@ -195,6 +209,10 @@ let CellBase = Vue.extend({
             let userStyling: any =  R.path(['settings', 'cellStyling'], this.$store.state);
             if (userStyling) {
                 style = userStyling(style);       // allow the user to make modifications
+
+                // make this easily accessible
+                this.canEdit = style.canEdit;
+                this.blankCell = style.blankCell;
             }
 
             // }
@@ -260,7 +278,10 @@ let CellBase = Vue.extend({
             info.rowNo = Number.parseInt(rowNo);
 
             // tell the store to update itself with the selection
-            this.$store.commit("selectRow", info);
+            window.setTimeout(() => {
+                this.$store.commit("selectRow", info);    
+            }, (1));
+            
 
             // check if we clicked on the group exp/col icon
             if (this._$cell.find(".exp-col").length > 0) {

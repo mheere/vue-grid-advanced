@@ -363,7 +363,7 @@ export default function createStore(state: any) {
 					}
 				}
 
-				// Note, this willraise the onChanged event through the use of a watcher!
+				// Note, this will raise the onChanged event through the use of a watcher!
 				state.gridStateInfo = internalCreateStateInfo(state);
 			},
 			calcRowsToDisplay(state, stuff) {

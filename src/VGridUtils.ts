@@ -113,6 +113,8 @@ export class CellStyleInfo {
 	public rows: any[] = [];
 
 	// these properties can be adjusted -----
+	public canEdit: boolean = false;
+	public blankCell: boolean = false;
     public backgroundColor: string = "";
     public color: string = "";
 	public faImage: string = "";
@@ -147,6 +149,9 @@ export class CellStyleInfo {
 		this.style.faImage = this.faImage;
 		this.style.faImageColour = this.faImageColour;
 		this.style.text = this.textDisplay;
+
+		if (this.canEdit)
+			this.style.backgroundColor = "rgba(249, 243, 55, 0.33)";
 
 		return this.style;
 	}

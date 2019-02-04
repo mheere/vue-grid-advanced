@@ -87,6 +87,15 @@ settings.cellStyling = (style: CellStyleInfo) => {
         style.faImageColour = img.contains("up") ? "green" : "red";
     }
     
+    // if one is below the age of 50 enable the checkbox
+    if (col.dbName == "optIn") {
+        if (row["age"] < 50) 
+            style.canEdit = true;
+        if (row["age"] > 70) 
+            style.blankCell = true;
+            
+    }
+
     // return the adjusted cell-style
     return style;
 }
