@@ -8,6 +8,7 @@ import { Converters as c } from '../../core';
 import { SelectRowInfo, VGridManager, VGridSettings, CellStyleInfo, GridColumn } from '../../index';
 import { ICheckboxConverter, CheckboxConverter01234 } from "../../CheckboxConverter";
 
+// little trick to make my props typesafe - there are other ways but this is nice and easy...
 export class MyData {
     public _$cell: any = null;
     public isImage: boolean = false;
@@ -16,18 +17,11 @@ export class MyData {
     public iconPre: string = "far";
     public iconName: string = "window-minimize";
     public text: string = "";
-    public canEdit: boolean = false;
-    public blankCell: boolean = false;
+    public style: CellStyleInfo = undefined;
 }
 
-//let k = 12;
-let k: any = {};
-k.lastName = "Heeremans";
-export { k };
-
-//let cb01234: ICheckboxConverter = new CheckboxConverter01234();
-
-let CellBase = Vue.extend({
+// define the CellBase
+export const CellBase = Vue.extend({
     props: ['rowNo', 'colDef'],
     data: () => new MyData(),
     methods: {
@@ -139,7 +133,11 @@ let CellBase = Vue.extend({
                 styleBase.borderBottom = "1px solid #9fa79b";
 
             // create a style object we can pass to the user to be altered
-            let style: CellStyleInfo = new CellStyleInfo(styleBase, this.getValue, this.colDef, row, this.$store.state);
+            let style: CellStyleInfo = new CellStyleInfo();
+            style.prepare(styleBase, this.getValue, this.colDef, row, this.$store.state);
+
+            // make this easily accessible
+            this.style = style;
 
             // super fast
             // if (this.$store.state.isVertScrolling) {
@@ -173,18 +171,6 @@ let CellBase = Vue.extend({
                 style.backgroundColor = "orange";
             }
 
-            
-            // // -slow- if this is a checkbox column then determine the image
-            // if (this.colDef.isCheckbox && this.colDef.checkboxConverter) {
-            //     let conv = this.colDef.checkboxConverter as ICheckBoxConverter;
-            //     // this.iconPre = "far";
-            //     // this.iconName = "square";
-            //     if (conv.FromDB(style.textRaw)) 
-            //         this.iconName = "check-square";
-            //     else
-            //         this.iconName = "square";
-            // }
-
             // do some formatting (for numbers)
             if (colDef.isNumber && colDef.isFormatting) {
                 style.textDisplay = numeral(style.textRaw).format(colDef.format);
@@ -209,10 +195,6 @@ let CellBase = Vue.extend({
             let userStyling: any =  R.path(['settings', 'cellStyling'], this.$store.state);
             if (userStyling) {
                 style = userStyling(style);       // allow the user to make modifications
-
-                // make this easily accessible
-                this.canEdit = style.canEdit;
-                this.blankCell = style.blankCell;
             }
 
             // }
@@ -296,5 +278,5 @@ let CellBase = Vue.extend({
     }
 });
 
-export { CellBase };
+//export { CellBase };
 

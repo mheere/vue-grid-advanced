@@ -123,7 +123,12 @@ export class CellStyleInfo {
 	// --------------------------------------
 	
 
-    constructor(style: any, text: any, col: GridColumn, row: any, state: any) { 
+	constructor() { 
+    //constructor(style: any, text: any, col: GridColumn, row: any, state: any) { 
+		
+	}
+
+	public prepare(style: any, text: any, col: GridColumn, row: any, state: any) {
 		this.style = style;
 		this.row = row;
 		this.col = col;

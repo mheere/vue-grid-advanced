@@ -59,7 +59,8 @@ export default Vue.extend({
                  text = numeral(text).format(this.colDef.format);
             }
 
-            let style: CellStyleInfo = new CellStyleInfo(styleBase, text, this.colDef, this.$store.state.totalsRow, this.$store.state);
+            let style: CellStyleInfo = new CellStyleInfo();
+            style.prepare(styleBase, text, this.colDef, this.$store.state.totalsRow, this.$store.state);
             style.rows = this.$store.state.rowsPrepared;
             style.isTotalRow = true;
 
