@@ -2,7 +2,7 @@ import Vue from "vue";
 import * as $ from 'jquery';
 import * as R from 'ramda';
 import * as rxjs from 'rxjs';
-import * as numeral from 'numeral';
+import * as numeral from 'numeral'; // test
 import * as moment from "moment";
 import { SelectRowInfo, VGridManager, VGridSettings, CellStyleInfo, GridColumn } from '../../index';
 
