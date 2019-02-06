@@ -1,12 +1,10 @@
 import Vue from "vue";
 import * as $ from 'jquery';
 import * as R from 'ramda';
+import * as rxjs from 'rxjs';
 import * as numeral from 'numeral';
 import * as moment from "moment";
-import * as Enumerable from 'linq'
-import { Converters as c } from '../../core';
 import { SelectRowInfo, VGridManager, VGridSettings, CellStyleInfo, GridColumn } from '../../index';
-import { ICheckboxConverter, CheckboxConverter01234 } from "../../CheckboxConverter";
 
 // little trick to make my props typesafe - there are other ways but this is nice and easy...
 export class MyData {
@@ -239,10 +237,32 @@ export const CellBase = Vue.extend({
         }
     },
     mounted: function () {
-	
+    
+        // get a ref to the cell dom
         this._$cell = $(this.$refs.mygridcell);	
-        //     this._$rowHolder = $(this.$refs.refgridrows);	
 
+        // var click$ = rxjs.fromEvent(this._$cell[0], 'click');
+
+        // // clicks.subscribe((e) => {
+        // //     clickedRow(e);
+        // // })
+
+        // click$.buffer(click$.debounce(250))
+        // .map(list => list.length)
+        // .filter(x => x === 2)
+        // .subscribe(() => {
+        //   console.log('doubleclick');
+        // })
+
+
+        // clicks.bufferWithTime(300).flatMap(x => {
+        //     if (x.length < 2)
+        //         clickedRow();
+        //     else
+        //         clickedRow(true);
+        // })
+
+        // define a clicked handler
         let clickedRow = (e, isDblClk = false) => {
             // read out the actual rowno
             let rowNo = this._$cell.closest('.vg-row').attr('data-rowno');
@@ -254,16 +274,15 @@ export const CellBase = Vue.extend({
 
             if (isDblClk)
                 info.dblClickedColumn = coldb;
-            info.altKey = e.altKey;
-            info.ctrlKey = e.ctrlKey;
-            info.shiftKey = e.shiftKey;
+            // info.altKey = e.altKey;
+            // info.ctrlKey = e.ctrlKey;
+            // info.shiftKey = e.shiftKey;
             info.rowNo = Number.parseInt(rowNo);
 
             // tell the store to update itself with the selection
             window.setTimeout(() => {
                 this.$store.commit("selectRow", info);    
             }, (1));
-            
 
             // check if we clicked on the group exp/col icon
             if (this._$cell.find(".exp-col").length > 0) {
@@ -275,6 +294,9 @@ export const CellBase = Vue.extend({
         $(this._$cell).on("click", (e) => clickedRow(e));
         $(this._$cell).on("dblclick", (e) => clickedRow(e, true));
 
+    },
+    beforeDestroy: function() {
+        $(this._$cell).off()
     }
 });
 
