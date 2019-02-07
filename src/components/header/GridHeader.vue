@@ -45,7 +45,7 @@ export default Vue.extend({
                 return this.$store.getters.visibleColumns;
         },
         isShowingGrouperBar(): boolean {
-            return this.$store.state.showGrouperBar;
+            return this.$store.state.showGrouperBar && this.frozenMode == "none";
         },
         hasPivotColumns(): boolean {
             return this.$store.state.settings.hasPivotColumns;
