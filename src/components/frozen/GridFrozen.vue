@@ -2,9 +2,9 @@
 <template>
     <div class='vg-header-group' >
 
-        <GridGrouper v-if="isShowingGrouperBar"></GridGrouper>
+        <!-- <GridGrouper v-if="isShowingGrouperBar"></GridGrouper> -->
 
-        <div class='vg-header' v-bind:class="{ 'add-grouper-padding' : isShowingGrouperBar, 'pivot-header' : hasPivotColumns }">
+        <div class='vg-header' v-bind:class="{ 'add-grouper-padding' : isShowingGrouperBar }">
 
             <div v-for="col in columns" class='vg-row-header-cell' :key='col.dbName' >
                 <GridCellHeader :colDef="col"></GridCellHeader>
@@ -28,21 +28,17 @@ import { GridColumn } from '../../GridColumns';
 //<!-- <i className='fa fa-caret-down fa-2x'></i> -->     v-if="this.showColumnDroppable()"
 
 export default Vue.extend({
-    props: ['frozenMode'],
+    props: [],
     components: { GridCellHeader, GridGrouper },
     methods: {
         showColumnDroppable(): boolean {
             return true;
         },
+       
     },
     computed: {
         columns(): GridColumn[] {
-            if (this.frozenMode == "left")
-                return this.$store.getters.frozenColumnsLeft;
-            else if (this.frozenMode == "right")
-                return this.$store.getters.frozenColumnsRight;
-            else
-                return this.$store.getters.visibleColumns;
+            return this.$store.getters.visibleColumns;
         },
         isShowingGrouperBar(): boolean {
             return this.$store.state.showGrouperBar;

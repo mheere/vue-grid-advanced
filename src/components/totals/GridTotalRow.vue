@@ -2,9 +2,9 @@
 <template>
     <div class='vg-footer' >
         
-        <span v-for="col in visibleColumns" class='vg-row-footer-cell' :key='col.dbName' >
+        <span v-for="col in columns" class='vg-row-footer-cell' :key='col.dbName' >
 
-            <GridCellTotal :colDef="col"></GridCellTotal>
+            <GridCellTotal :colDef="col" :frozenMode='frozenMode'></GridCellTotal>
 
         </span>
 
@@ -17,7 +17,7 @@ import GridCellTotal from './GridCellTotal.vue';
 import { GridColumn } from '../../GridColumns';
 
 export default Vue.extend({
-    props: [],
+    props: [ 'frozenMode' ],
     components: { GridCellTotal },
     data: function () {
         return {
@@ -28,18 +28,18 @@ export default Vue.extend({
     computed: {
         visibleColumns(): GridColumn[] {
             return this.$store.getters.visibleColumns;
-        }
+        },
+        columns(): GridColumn[] {
+            if (this.frozenMode == "left")
+                return this.$store.getters.frozenColumnsLeft;
+            else if (this.frozenMode == "right")
+                return this.$store.getters.frozenColumnsRight;
+            else
+                return this.$store.getters.visibleColumns;
+        },
     },
     methods: {
-        // decrement () {
-        //     this.$store.commit('decrement');
-        // },
-        // increment() {
-        //     this.$store.commit('increment');
-        // },
-        // increment2() {
-        //     this.$store.commit('incrementLineHeight');
-        // }
+        
     }
 });
 </script>

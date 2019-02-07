@@ -71,7 +71,7 @@ export default Vue.extend({
 		this._$vertScrollbar = $('.z-vertical-scrollbar', this._$parent);
 		this._$vertScroller = $('.z-vertical-scroller', this._$parent);
 		this._$refVertScroll = $('.ref-verticalScrollbar', this._$parent);
-		this._$gridRows = $('.vg-row-holder', this._$parent);
+		this._$gridRows = $('.vg-row-holder.none', this._$parent);
 		this._$header = $('.vg-header', this._$parent);
 
 		let debounced2 = _.debounce(() => {
@@ -136,7 +136,7 @@ export default Vue.extend({
 			this._$vertScrollbar.css("top", headerHeight + "px");
 
 			// get the columns from the store
-			let columns: GridColumn[] = this.$store.state.columns;
+			let columns: GridColumn[] = this.$store.getters.visibleColumns;
 	
 			// calculate the total width required - use implicit lodash chaining - reduce (returns single value) ends the chain automatically
 			// (could have used _.chain explictly but... he...)
@@ -156,8 +156,8 @@ export default Vue.extend({
 				bottom += 23;
 	
 			// if the total columns width > grid window then x scroll is introduced so allow us to jump up 17 px.
-			if (totWidth > this._$gridRows.width())
-				bottom += 17;
+			let hasHorzScrollbar = totWidth > this._$gridRows.width();
+			if (hasHorzScrollbar) bottom += 17;
 	
 			let rowsTotalHeight = this.$store.getters.rowsTotalHeight;
 			this._$vertScroller.css("height", rowsTotalHeight + "px");
@@ -185,7 +185,8 @@ export default Vue.extend({
 	
 			// }
 
-			this.$store.commit('calcRowsToDisplay', { visibleHeight: windowHeight, diff, rowHeight: this._rowHeight });
+//debugger;
+			this.$store.commit('calcRowsToDisplay', { visibleHeight: windowHeight, diff, rowHeight: this._rowHeight, hasHorzScrollbar });
 			
 
 	

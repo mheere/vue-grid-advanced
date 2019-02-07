@@ -3,7 +3,7 @@
 	<div ref="myheadercell" class="vgrid-data-header-cell" v-bind:style="mhstyle" @click="sort" :data-col-name="colName">
 		<font-awesome-icon v-bind:class="headerSortClass()" v-bind:icon="this.sortIcon()" v-if="this.showSortIconLeft()"/>
 
-		<span>{{ colDef.header }}</span>
+		<span class='header-text' v-bind:class="{ 'pivot-header-cell' : colDef.pivotHeader }">{{ colDef.header }}</span>
 
 		<font-awesome-icon v-bind:class="headerSortClass()" v-bind:icon="this.sortIcon()" v-if="this.showSortIconRight()"/>
 
@@ -64,7 +64,8 @@ export default Vue.extend({
 				display: "inline-block",
 				backgroundColor: "#f5f5f5",
 				color: "black",
-				lineHeight: "26px",
+				// lineHeight: "26px",
+				height: 'inherit',
 				whiteSpace: "nowrap",
 				width: this.colDef.width + "px",
 				textAlign: this.colDef.align,

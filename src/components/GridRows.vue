@@ -1,9 +1,9 @@
 
 <template>
-    <div ref="myrows" class='flex-child flex-parent-col vg-row-holder'>
+    <div ref="myrows" :class="['flex-child', 'flex-parent-col', 'vg-row-holder', frozenMode]">
 
         <div class='vg-row-parent ' v-for="(i, index) in visibleRowCount" :key='index' >
-            <GridRow v-bind:rowNo=getRowNo(index) ></GridRow>
+            <GridRow :maxRowCount='maxRowCount' :frozenMode='frozenMode' v-bind:rowNo=getRowNo(index) ></GridRow>
         </div>
 
     </div>
@@ -28,10 +28,17 @@ function checkResizedHeight(){
 }
 
 export default {
+    props: ['frozenMode'],
     components: { GridRow },
     computed: {
+        maxRowCount(): number {
+            return this.$store.state.rowsPreparedCount;
+        },
         visibleRowCount(): number {
-            return this.$store.state.visibleRowCount > 0 ? this.$store.state.visibleRowCount : 0;
+            let count = this.$store.state.visibleRowCount > 0 ? this.$store.state.visibleRowCount : 0;
+            // if (count >= this.$store.state.rowsPreparedCount && this.$store.state.rowsPreparedCount > -1)
+            //     count = this.$store.state.rowsPreparedCount - 1;
+            return count;
         }
     },
     methods: {

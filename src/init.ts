@@ -14,6 +14,21 @@ settings.el = ".test-grid-1";	// either a class/id identifier or the actual html
 // specify which columns to use
 settings.columns = getColumns();
 
+// pivot all columns (testing)
+settings.columns.forEach((c, i) => {
+    //c.pivotHeader = true;
+    // if (i % 2 == 0)
+    //     c.pivotHeader = true;
+    // else
+    //     c.pivotHeader = false;
+});
+
+settings.columns.find(c => c.dbName.isSame("code")).frozenLeft = true;
+settings.columns.find(c => c.dbName.isSame("dob")).frozenRight = true;
+
+//settings.columns.find(c => c.dbName.isSame("age")).aggregate = "";
+//settings.columns.find(c => c.dbName.isSame("valuation")).aggregate = "";
+
 // spcify the column the grid can interpret to be the 'primary key' - this is returned
 // each time a selection(s) is made
 // if left blank the inner unique 'pkvalue' is returned as id value

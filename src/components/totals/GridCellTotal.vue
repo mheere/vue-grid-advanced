@@ -22,7 +22,7 @@ class MyData {
 }
 
 export default Vue.extend({
-    props: ['colDef'],
+    props: ['colDef', 'frozenMode'],
     data: () => new MyData(),
     methods: {
         showSortIconLeft(): boolean {
@@ -33,12 +33,17 @@ export default Vue.extend({
        
         mhstyle(): any {
 
+            let lineHeight = '22px';
+            if (this.$store.state.hasHorzScrollbar && 
+                (this.frozenMode == "left" || this.frozenMode == "right"))
+                    lineHeight = '39px';
+
             let styleBase = {
                 position: 'relative',
                 display: 'inline-block',
                 backgroundColor: 'rgb(228, 228, 228)',
                 color: this.colDef.isAggregate ? 'black': 'rgb(228, 228, 228)',
-                lineHeight: '22px',
+                lineHeight: lineHeight,
                 whiteSpace: 'nowrap',
                 width: this.colDef.width + "px",
                 textAlign: this.colDef.align,
@@ -46,7 +51,7 @@ export default Vue.extend({
                 borderTop: '1px solid rgb(159, 167, 155)',
                 padding: '0 2px'
             }
-            
+
             // 
             let text = "";
             if (this.colDef.isAggregate)

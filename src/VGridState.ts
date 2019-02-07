@@ -1,5 +1,6 @@
 
 import { GridStateInfo, VGridSettings } from './index';
+import { GridColumn } from './GridColumns';
 
 // -------------------------------------------------------
 // The Vue Grid's State (i.e. Store in the Redux model)
@@ -18,8 +19,8 @@ export class VGridState {
 	public visibleRowCount: number = 0;
 	public startRow: number = 0;
 
-	public columns: any[] = [];
-	public groupingColumns: string[] = [];
+	public columns: GridColumn[] = [];
+	public groupingColumns: GridColumn[] = [];
 
 	public clickedColumn: string = "";
 	public dblClickedColumn: string = "";				// if given then there was dbl click 
@@ -29,6 +30,7 @@ export class VGridState {
 	public visibleHeight: number = 340;
 	public vertScrollDiff: number = 0;
 	public setVertScrollRatio: number = -1;			// -1 do nothing - else VertScroll needs to act
+	public hasHorzScrollbar: boolean = false;
 	
 	public gridKey: string = "";
 	public isRefreshData: boolean = false;			// toggle this to force a total refresh !

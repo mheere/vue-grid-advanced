@@ -1,6 +1,6 @@
 
 <template>
-    <div class='vg-row' :data-rowno="rowNo"  >
+    <div class='vg-row' :data-rowno="rowNo" v-if='rowNo < maxRowCount' >
         
         <GridCellGeneric v-for="col in columns" :key='col.dbName'
                 v-bind:rowNo="rowNo" v-bind:colDef="col" ></GridCellGeneric>
@@ -20,7 +20,7 @@ import GridCellGeneric from './Cells/GridCellGeneric.vue';
 import { GridColumn } from '../GridColumns';
 
 export default Vue.extend({
-    props: ['rowNo'],
+    props: ['rowNo', 'frozenMode', 'maxRowCount'],
     components: { GridCellGeneric },
     data: function () {
         return {
@@ -35,7 +35,13 @@ export default Vue.extend({
             return this.$store.state.isRefreshData;
         },
         columns(): GridColumn[] {
-            return this.$store.getters.visibleColumns;
+            if (this.frozenMode == "left")
+                return this.$store.getters.frozenColumnsLeft;
+            else if (this.frozenMode == "right")
+                return this.$store.getters.frozenColumnsRight;
+            else
+                return this.$store.getters.visibleColumns;
+            //return this.$store.getters.visibleColumns;
         }
     },
     methods: {

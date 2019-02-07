@@ -95,9 +95,6 @@ export default function createStore(state: any) {
 			isGroupingCol: (state: any) => (col: GridColumn) => {
 				return state.groupingColumns.includes(col.dbName);
 			},
-			visibleColumns: (state, getters) => {
-				return getters.groupingColumns.concat(getters.nonGroupingColumns);
-			},
 			groupingColumns: (state) => {
 				//let retColumns = state.columns.filter(c => c.visible).sort((a, b) => a.order - b.order);
 				let retColumns = state.groupingColumns.map(c => state.columns.find(c2 => c2.dbName.isSame(c)));
@@ -106,6 +103,22 @@ export default function createStore(state: any) {
 			nonGroupingColumns: (state) => {
 				let retColumns = state.columns.filter(c => c.visible).sort((a, b) => a.order - b.order);
 				return retColumns.filter(c => !state.groupingColumns.includes(c.dbName));
+			},
+			visibleColumns: (state, getters) => {
+				// return the grouping columns first, then the non grouping cols
+				return getters.groupingColumns.concat(getters.nonGroupingColumns).filter(c => !c.frozenLeft && !c.frozenRight);
+			},
+			hasFrozenColsLeft: (state: VGridState, getters) => {
+				return getters.frozenColumnsLeft.length > 0;
+			},
+			hasFrozenColsRight: (state: VGridState, getters) => {
+				return getters.frozenColumnsRight.length > 0;
+			},
+			frozenColumnsLeft: (state: VGridState) => {
+				return state.columns.filter(c => c.frozenLeft);
+			},
+			frozenColumnsRight: (state: VGridState, getters) => {
+				return state.columns.filter(c => c.frozenRight);
 			},
 			getGridStateInfoIdentifier: state => () => state.gridStateInfo,
 		},
@@ -372,6 +385,7 @@ export default function createStore(state: any) {
 
 				state.vertScrollDiff = stuff.diff;
 				state.visibleHeight = stuff.visibleHeight;
+				state.hasHorzScrollbar = stuff.hasHorzScrollbar;
 				//if (stuff.rowHeight > 0) state.rowHeight = stuff.rowHeight;
 
 				// if there are no rows prepared from the engine (there is no data to display), just step out

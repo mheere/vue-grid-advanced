@@ -12,18 +12,25 @@
                 <div class='flex-nested-start flex-parent-row ' style=''>
                     <!-- <div class='flex-parent-row'> -->
                         
-                        <!-- <div class='frozenLeft'> </div> -->
+                        <div class='frozen-left flex-parent-col' v-if='hasFrozenColsLeft'> 
+                            <GridHeader frozenMode='left' />
+                            <GridRows frozenMode='left' />
+                            <GridTotalRow v-if='isShowingTotalsRow' frozenMode='left' />
+                        </div>
 
                         <div class='flex-child ' ref='mygrid'>
                             <div class='flex-nested-start flex-parent-col flex-scrollable-x'>
-                                <GridHeader />
-                                <GridRows />
-                                <GridTotalRow v-if='isShowingTotalsRow' />
-                                
+                                <GridHeader frozenMode='none' />
+                                <GridRows frozenMode='none' />
+                                <GridTotalRow v-if='isShowingTotalsRow' frozenMode='none' />
                             </div>
                         </div>
                         
-                        <!-- <div class='frozenRight'> </div> -->
+                        <div class='frozen-right flex-parent-col' v-if='hasFrozenColsRight'> 
+                            <GridHeader frozenMode='right' />
+                            <GridRows frozenMode='right' />
+                            <GridTotalRow v-if='isShowingTotalsRow' frozenMode='right' />
+                        </div>
 
                         <transition name="fade">
                             <ConfigColumns v-if='isShowingColumns' />
@@ -84,6 +91,12 @@ export default Vue.extend({
         isShowingGrouperBar(): boolean {
             return this.$store.state.showGrouperBar;
         },
+        hasFrozenColsLeft(): boolean {
+            return this.$store.getters.hasFrozenColsLeft;
+        },
+        hasFrozenColsRight(): boolean {
+            return this.$store.getters.hasFrozenColsRight;
+        },
     },
     methods: {
         dodecrement () {
@@ -118,16 +131,18 @@ export default Vue.extend({
   opacity: 0;
 }
 
-.frozenLeft {
+.frozen-left {
     height: 100%;
-    width: 80px;
     background-color: #e0e4d8;
-    border-right: 1px solid #926969;
+    border-right: 1px solid #9fa79b;
+        overflow: hidden;
 }
-.frozenRight {
+
+.frozen-right {
     height: 100%;
-    width: 80px;
     background-color: #e0e4d8;
-    border-left: 1px solid #926969;
+    border-left: 1px solid #9fa79b;
+        overflow: hidden;
 }
+
 </style>

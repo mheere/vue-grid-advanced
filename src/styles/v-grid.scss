@@ -64,6 +64,73 @@
 
 // ------------------------------------
 
+.vg-my-grid {
+
+    .vg-header {
+        
+        &:not(.pivot-header) {
+            line-height: 24px;
+        }
+        &.pivot-header {
+            height: 120px;
+        }
+
+        .vg-row-header-cell {
+            overflow: hidden;
+            vertical-align: bottom;
+            text-align: left;
+            height: inherit;
+
+            .header-text.pivot-header-cell {
+                transform-origin: center;
+                white-space: nowrap;
+                display: inline-block;
+                overflow: hidden;
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                transform: rotate(-90deg) translateX(10px) translateY(-50%);
+                transform-origin: left top;
+            }
+        }
+
+    }
+}
+
+.vg-grid.pivot {
+
+    .rg-header {
+
+        > .flex-parent-row {
+            height: 200px;
+        }
+
+        .mh-cell-header.pivot {
+            overflow: hidden;
+            vertical-align: bottom;
+            text-align: left;
+
+            > span {
+                transform-origin: center;
+                white-space: nowrap;
+                display: inline-block;
+                overflow: hidden;
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                transform: rotate(-90deg) translateX(10px) translateY(-50%);
+                transform-origin: left top;
+            }
+        }
+
+        .mh-cell-header:not(.pivot) {
+            padding-top:175px;
+        }
+    }
+}
+
+// ------------------------------------
+
 .z-vertical-scrollbar {
     overflow: hidden;
     position: absolute;
