@@ -31,6 +31,9 @@ export function getColumns(): GridColumn[] {
 	col = new GridColumn("valuation", 120, "", "number", "right", "#,##0.00");
 	col.aggregate = "sum";
 	cols.push(col);
+	for(var i = 0 ; i < 3 ; i++) {
+		cols.push(new GridColumn("test" + i, 70, "", "", ""));
+	}
 
 	return cols;
 }
@@ -78,6 +81,11 @@ export function createData(newRowCount: number = 500): any[] {
 			row.updown = getRandomArrayEntry(arrUpDown);
 			row.valuation = getRandomNumber(10000);
 			row.img = getRandomArrayEntry(arrImages);
+
+			for(var i = 0 ; i<10 ; i++) {
+				row['test' + i] = getRandomArrayEntry(counties);
+			}
+
 			return row;
 	}
 

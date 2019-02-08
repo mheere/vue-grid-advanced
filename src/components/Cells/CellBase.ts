@@ -137,6 +137,10 @@ export const CellBase = Vue.extend({
             // make this easily accessible
             this.style = style;
 
+            // idea - try to exclude certain columns from updating update only text - hmm not sure
+            // this.text = style.textDisplay;
+            // return style.toStyle();
+
             // super fast
             // if (this.$store.state.isVertScrolling) {
             //     this.text = style.textDisplay;
@@ -187,9 +191,9 @@ export const CellBase = Vue.extend({
                 VGridManager.processCurrency(row, this.colDef, this.$store.state.settings, style);
             }
 
-            // ---------------------------------------------------
+            // ***************************************************
             // if user wishes to do some custom styling...
-            // ---------------------------------------------------
+            // ***************************************************
             let userStyling: any =  R.path(['settings', 'cellStyling'], this.$store.state);
             if (userStyling) {
                 style = userStyling(style);       // allow the user to make modifications

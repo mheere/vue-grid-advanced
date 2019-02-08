@@ -5,6 +5,7 @@
   "description": "An advanced Vue Grid - still under active development... ",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --color --progress",
+    "prod": "webpack-dev-server --config ./webpack.prod.js --color --progress",
     "create-lib": "webpack --config ./webpack.npm.js --color --progress"
   },
   "keywords": [],

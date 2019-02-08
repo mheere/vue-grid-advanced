@@ -236,7 +236,7 @@ export class VGridSettings {
 	public showCellContentOnDblClickCols: any[] = [];      // an array of columns that upon dbl click will show the content of that cell.
 	//public frozenColumnsLeft: string[] = [];        // specifies columns that are frozen and which order... (left)
 	//public frozenColumnsRight: string[] = [];       // specifies columns that are frozen and which order... (right)
-	public hasPivotColumns: boolean = false;
+	//public hasPivotColumns: boolean = false;
 	
 	// ----------------------
 	// currencies

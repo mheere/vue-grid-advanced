@@ -291,6 +291,31 @@ property | purpose |
 *dblClickedColumn* | row was double clicked |
 *gridDisplayMode* | ** coming up ** |
 
+
+# Frozen Columns and multiple headers
+
+By setting the `frozenLeft` or the `frozenRight` property on a GridColumn to true you can 'freeze' any column either on the left or right hand side.
+Column headers are now defined through an array of HeaderInfo objects so that each can be switched to horizontal (default) or vertical text.  Defining a new GridColumn and specifying a main header does not change.
+
+_In future versions any header with the same text as its adjecent cell will be merged._
+
+```javascript
+// here we already have a GridSettings object that contains our columns
+// lets freeze the 'code' column to the left and the 'dob' to the right!
+// (isSame is a String prototype entended property testing for case-insensitive equality )
+settings.columns.find(c => c.dbName.isSame("code")).frozenLeft = true;
+settings.columns.find(c => c.dbName.isSame("dob")).frozenRight = true;
+
+// add some random secondary headers
+let headerSamples = ["AAA", "BBB", "CCC", "DDD"];
+settings.columns.forEach(c => c.headers.push(new HeaderInfo(getRandomArrayEntry(headerSamples), 50, "vert")));
+
+```
+
+![7_frozen_cols_multiple_header.png](http://www.vuegrid.marcelheeremans.com/pics/7_frozen_cols_multiple_header.png)
+
+
+
 ___
 ## VGridSettings - essential properties
 property | args/value (default) | purpose | 
@@ -314,15 +339,14 @@ Type | Name | args/value (default) | Description |
 
 
 # History
+> Do note this grid is actively worked on (hence a version number of 0.\*.*)
 
 |version | date | notes |
 | ---- | ------ | ------ |
+v 0.0.4 | 08 Feb 2018 | Frozen columns and multiple headers
 v 0.0.3 | 23 Jan 2018 | project structure changes - some api updates
 v 0.0.2 | 20 Jan 2018 | minor changes
 v 0.0.1 | 20 Jan 2018 | Initial release - many more features to follow shortly
 
 
-# A quick first look
-The sample grid below is configured to group by 'currency' and average the 'age' and total the 'valuation' columns.
 
-![0.demo2.png](http://www.vuegrid.marcelheeremans.com/pics/0_demo2.png)

@@ -43,9 +43,9 @@ export default Vue.extend({
         isShowingGrouperBar(): boolean {
             return this.$store.state.showGrouperBar;
         },
-        hasPivotColumns(): boolean {
-            return this.$store.state.settings.hasPivotColumns;
-        },
+        // hasPivotColumns(): boolean {
+        //     return this.$store.state.settings.hasPivotColumns;
+        // },
     },
 });
 </script>

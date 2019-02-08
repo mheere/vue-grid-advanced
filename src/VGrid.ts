@@ -18,7 +18,7 @@ export class VGrid {
 		settings.vgrid = this;
 
 		// check if any columns are pivotted - if they are we need the settings to know about it
-		settings.hasPivotColumns = settings.columns.hasItem(item => item.pivotHeader);
+		//settings.hasPivotColumns = settings.columns.hasItem(item => item.pivotHeader);
 
 		// ask the GridManager to create us a VGrid given its settings
 		let ret = VGridManager.createGrid(settings);

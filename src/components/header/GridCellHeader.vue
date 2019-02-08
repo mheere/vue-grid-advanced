@@ -1,18 +1,26 @@
 
 <template>
-	<div ref="myheadercell" class="vgrid-data-header-cell" v-bind:style="mhstyle" @click="sort" :data-col-name="colName">
-		<font-awesome-icon v-bind:class="headerSortClass()" v-bind:icon="this.sortIcon()" v-if="this.showSortIconLeft()"/>
 
-		<span class='header-text' v-bind:class="{ 'pivot-header-cell' : colDef.pivotHeader }">{{ colDef.header }}</span>
+	<div class=' flex-parent-col'  >
 
-		<font-awesome-icon v-bind:class="headerSortClass()" v-bind:icon="this.sortIcon()" v-if="this.showSortIconRight()"/>
+		<!-- First show the additional headers -->
+		<div v-for="(headerInfo, index) in headerRest" class="vgrid-data-header-cell" v-bind:style="mhstyle(index)" :key='index'>
+			<span class='header-text' v-bind:class="{ 'pivot-header-cell' : headerInfo.isVert }">{{ headerInfo.header }}</span>
+		</div>
 
-		<div class="vg-header-resize-marker"></div>
+		<!-- Then show the MAIN header -->
+		<div ref="myheadercell" class="vgrid-data-header-cell" v-bind:style="mhstyle(-1)" @click="sort" :data-col-name="colName">
+			<font-awesome-icon v-bind:class="headerSortClass()" v-bind:icon="this.sortIcon()" v-if="this.showSortIconLeft()"/>
 
-		<!-- <span ref="insertmarker" class='col-insert-marker' >
-			<font-awesome-icon icon="sort-down" class='fa-2x' />
-		</span>-->
+			<span class='header-text' v-bind:class="{ 'pivot-header-cell' : headerZero.isVert }">{{ colDef.header }}</span>
+
+			<font-awesome-icon v-bind:class="headerSortClass()" v-bind:icon="this.sortIcon()" v-if="this.showSortIconRight()"/>
+
+			<div class="vg-header-resize-marker"></div>
+			
+		</div>
 	</div>
+
 </template>
 
 <script lang="ts">
@@ -49,23 +57,13 @@ export default Vue.extend({
 			if (this.colDef.sortDirection.isSame("asc"))
 				return "header-sort-img-asc";
 			else return "header-sort-img-desc";
-		}
-	},
-	computed: {
-		// header(): string {
-		//     return this.colDef.header;
-		// },
-		colName(): string {
-			return this.colDef.dbName;
 		},
-		mhstyle(): any {
+		mhstyle(index): any {
 			let style: any = {
 				position: "relative",
 				display: "inline-block",
 				backgroundColor: "#f5f5f5",
 				color: "black",
-				// lineHeight: "26px",
-				height: 'inherit',
 				whiteSpace: "nowrap",
 				width: this.colDef.width + "px",
 				textAlign: this.colDef.align,
@@ -73,11 +71,42 @@ export default Vue.extend({
 				borderBottom: "1px solid #798872",
 				padding: "6px"
 			};
+			
+			// 
+			let setHeight = hinfo => {
+				if (hinfo.isHorz) {
+					style.lineHeight = "26px";
+				}
+				else {
+					style.height = hinfo.height + 'px';
+				}
+			}
+
+			// if -1 then we are dealing with the MAIN header row
+			if (index == -1) 
+				setHeight(this.headerZero);
+			else
+				setHeight(this.headerRest[index]);
+			
+			// 
 			if (this.$store.state.showGrouperBar) {
 				style.borderTop = "1px solid #798872";
 			}
+
 			return style;
 		}
+	},
+	computed: {
+		headerZero() {
+			return this.colDef.headers[0];
+		},
+		headerRest() {
+			return this.colDef.headers.slice(1).reverse();
+		},
+		colName(): string {
+			return this.colDef.dbName;
+		},
+		
 	},
 	mounted: function() {
 		// when mounted we find the cell and hang on to it

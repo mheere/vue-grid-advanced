@@ -1,10 +1,31 @@
 import { ICheckboxConverter, CheckboxConverterYN, CheckboxConverter01234 } from './CheckBoxConverter';
 
+export class HeaderInfo {
+    public header: string = "";
+    public orientation: string = "horz";        // horz / vert
+    public height: number = 26;
+
+    constructor(header: string, height: number = 26, orientation: string = "horz") {
+        this.header = header;
+        this.height = height;
+        this.orientation = orientation;
+    }
+
+    get isVert() {
+        return this.orientation == "vert";
+    }
+
+    get isHorz() {
+        return this.orientation == "horz";
+    }
+
+}
 // --------------------------------------------------------
 // Describes all meta regarding a grid column
 // --------------------------------------------------------
 export class GridColumn {
   public header: string = "";
+  public headers: HeaderInfo [] = [];
   public dbName: string = "";
   public spanText: string = "";
   public order: number = -1;   
@@ -16,7 +37,7 @@ export class GridColumn {
   public align: string = "left";
   public sortDirection: string = ""
   public width: number = 0;
-  public pivotHeader: boolean = false;      // if true - pivots the header 90 degrees
+  //public pivotHeader: boolean = false;      // if true - pivots the header 90 degrees
   public aggregate: string = "";            // sum, etc
   public minWidth: number = 0;
   public minLength: number = -1;
@@ -41,6 +62,7 @@ export class GridColumn {
     this.dbName = dbName;
     this.width = width;
     this.header = header || dbName;
+    this.headers.push(new HeaderInfo(header));
     this.type = type || "string";
     this.align = align || "left";
     this.format = format;

@@ -4,7 +4,7 @@
 
         <GridGrouper v-if="isShowingGrouperBar"></GridGrouper>
 
-        <div class='vg-header' v-bind:class="{ 'add-grouper-padding' : isShowingGrouperBar, 'pivot-header' : hasPivotColumns }">
+        <div class='vg-header' v-bind:class="{ 'add-grouper-padding' : isShowingGrouperBar }">
 
             <div v-for="col in columns" class='vg-row-header-cell' :key='col.dbName' >
                 <GridCellHeader :colDef="col"></GridCellHeader>
@@ -47,9 +47,9 @@ export default Vue.extend({
         isShowingGrouperBar(): boolean {
             return this.$store.state.showGrouperBar && this.frozenMode == "none";
         },
-        hasPivotColumns(): boolean {
-            return this.$store.state.settings.hasPivotColumns;
-        },
+        // hasPivotColumns(): boolean {
+        //     return this.$store.state.settings.hasPivotColumns;
+        // },
     },
 });
 </script>
