@@ -2,7 +2,7 @@
 # An advanced Vue.js Grid Component 
 
 
-> This Vue grid is currently under active development.  There are a number of features that are currently being worked on.  If you fancy contributing to this project then contact me on github or fork the project from there.
+> This Vue grid is currently *under active development*.  If you fancy contributing to this project then contact me on github or fork the project.
 ___
 
 # Demo
@@ -339,10 +339,11 @@ Type | Name | args/value (default) | Description |
 
 
 # History
-> Do note this grid is actively worked on (hence a version number of 0.\*.*)
+> *Note* this grid is actively worked on (hence a version number of 0.\*.*) 
 
 |version | date | notes |
 | ---- | ------ | ------ |
+v 0.0.5 | 09 Feb 2018 | Export the HeaderInfo...
 v 0.0.4 | 08 Feb 2018 | Frozen columns and multiple headers
 v 0.0.3 | 23 Jan 2018 | project structure changes - some api updates
 v 0.0.2 | 20 Jan 2018 | minor changes

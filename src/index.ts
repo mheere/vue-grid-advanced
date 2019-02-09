@@ -34,7 +34,7 @@ Vue.use(Vuex);
 export { GridStateInfo, VGridSettings, SelectRowInfo, UpdateRowInfo, FindRowInfo, CellStyleInfo } from './VGridUtils';
 export { VGrid } from './VGrid';
 export { VGridManager } from './VGridManager';
-export { GridColumn } from './GridColumns';
+export { GridColumn, HeaderInfo } from './GridColumns';
 export { getColumns, createData, getRandomArrayEntry, getRandomNumber } from './TempData';
 
 
