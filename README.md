@@ -186,6 +186,7 @@ This results in a grid that looks like this:
 
 ### The CellStyleInfo exposes the following properties
 Note that for *each cell* a callback is made
+
 property | purpose | 
 | ---- | ------ | 
 *row* | the data row of this cell |
@@ -201,6 +202,7 @@ property | purpose |
 *rows* | all raw rows that would be shown |
 
 Below are the properties that can be overwritten and will adjust the final styling of the cell.
+
 property | purpose | 
 | ---- | ------ | 
 *backgroundColor* | the background colour of the cell |
@@ -295,9 +297,9 @@ property | purpose |
 # Frozen Columns and multiple headers
 
 By setting the `frozenLeft` or the `frozenRight` property on a GridColumn to true you can 'freeze' any column either on the left or right hand side.
-Column headers are now defined through an array of HeaderInfo objects so that each can be switched to horizontal (default) or vertical text.  Defining a new GridColumn and specifying a main header does not change.
+Column headers are now defined through an array of HeaderInfo objects.  These allow the header text to be shown vertically or horizontally (default).  When these are not supplied the main given header text is transformed into single HeaderInfo objects for each column.
 
-_In future versions any header with the same text as its adjecent cell will be merged._
+_In future versions any header with the same text as its adjacent cell will be merged._
 
 ```javascript
 // here we already have a GridSettings object that contains our columns
