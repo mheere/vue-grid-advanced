@@ -140,7 +140,7 @@ export default Vue.extend({
 	
 			// calculate the total width required - use implicit lodash chaining - reduce (returns single value) ends the chain automatically
 			// (could have used _.chain explictly but... he...)
-			let totWidth = _(columns)
+			let totWidth = columns
 				.filter(gc => gc.visible)
 				.map((gc) => {
 					let n = gc.width; 

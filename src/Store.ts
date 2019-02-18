@@ -108,6 +108,10 @@ export default function createStore(state: any) {
 				// return the grouping columns first, then the non grouping cols
 				return getters.groupingColumns.concat(getters.nonGroupingColumns).filter(c => !c.frozenLeft && !c.frozenRight);
 			},
+			visibleColumnsWidth: (state, getters) => {
+				let x = getters.visibleColumns;
+				// TODO - 
+			},
 			hasFrozenColsLeft: (state: VGridState, getters) => {
 				return getters.frozenColumnsLeft.length > 0;
 			},

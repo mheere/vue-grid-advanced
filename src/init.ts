@@ -7,6 +7,9 @@ import { HeaderInfo } from './GridColumns';
 // Lets create the grid
 // -----------------------------------------------------------------------
 
+let testFrozenLeft: boolean = false;
+let testFrozenRight: boolean = false;
+
 let createGrid = function() {
     // we ALWAYS start with defining the Grid Settings object
     let settings = new VGridSettings();
@@ -20,12 +23,10 @@ let createGrid = function() {
     // test functions
     // ------------------------
     //let testHeaderPivot: boolean = false;
-    let testFrozenLeft: boolean = true;
-    let testFrozenRight: boolean = true;
+    
     let testAggregates: boolean = true;
-    let showFirstHeaderVert: boolean = true;
-    let showSecondThirdHeaderRow: boolean = true;
-
+    let showFirstHeaderVert: boolean = false;
+    let showSecondThirdHeaderRow: boolean = false;
     if (testFrozenLeft) settings.columns.find(c => c.dbName.isSame("code")).frozenLeft = true;
     if (testFrozenRight) settings.columns.find(c => c.dbName.isSame("dob")).frozenRight = true;
 
@@ -173,6 +174,23 @@ xx('btnGroup1', () => vgrid.setGroupColumns(['currency']));
 xx('btnGroup2', () => vgrid.setGroupColumns(['currency', 'county']));
 xx('btnUnGroup10', () => vgrid.setGroupColumns([]));
 //xx('btnRefresh', () => vgrid.refresh());
+xx('btnUnfreeze', () => {
+    vgrid.destroy();
+    testFrozenLeft = false;
+    testFrozenRight = false;
+    createGrid();
+});
+xx('btnFreezeCode', () => {
+    vgrid.destroy();
+    testFrozenLeft = true;
+    createGrid();
+});
+xx('btnFreezeDoB', () => {
+    vgrid.destroy();
+    testFrozenRight = true;
+    createGrid();
+});
+
 
 
 xx('btnUpdateCell', () => {

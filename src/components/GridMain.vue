@@ -19,7 +19,7 @@
                         </div>
 
                         <div class='flex-child ' ref='mygrid'>
-                            <div class='flex-nested-start flex-parent-col flex-scrollable-x'>
+                            <div class='flex-nested-start flex-parent-col flex-scrollable-x' ref='scrolldiv'>
                                 <GridHeader frozenMode='none' />
                                 <GridRows frozenMode='none' />
                                 <GridTotalRow v-if='isShowingTotalsRow' frozenMode='none' />
@@ -62,6 +62,7 @@ import GridControl from './GridControl.vue';
 import GridVertScroll from './GridVertScroll.vue';
 import ConfigColumns from './config/ConfigColumns.vue';
 import ConfigSettings from './config/ConfigSettings.vue';
+import { GridColumn } from '../GridColumns';
 
 export default Vue.extend({
     props: ['rowNo', 'colDef'],
@@ -104,13 +105,38 @@ export default Vue.extend({
         },
         increment() {
             this.mhcount++;
-        }
+        },
+        handleScroll (event) {
+            var width = event.srcElement.clientWidth;
+            var leftX = event.srcElement.scrollLeft;
+            var rightX = leftX + width;
+            //console.log('x', leftX);
+
+            // get the columns from the store
+			let columns: GridColumn[] = this.$store.getters.visibleColumns;
+	
+            // increment the width - then when we are out of sight make the cell invisible...
+            var x: number = 0;
+            columns.forEach(col => {
+                col.dontRender = false;
+                if (x > rightX) col.dontRender = true;
+                x += col.width;
+                if (x < leftX) col.dontRender = true;
+            });
+
+        },
     },
-    created: function () {
-        //console.log('created - GridMain');
+    created () {
+    },
+    beforeDestroy () {
+        this.$refs.scrolldiv.removeEventListener('scroll', this.handleScroll);
     },
     mounted: function () {
-        //console.log('mounted - GridMain');
+        
+        // handle any horizontal scrolling...
+        this.$refs.scrolldiv.addEventListener('scroll', this.handleScroll);
+
+        // 
         $(this.$refs.mygrid).on('click', () => {
             this.$store.commit('resetRightSliders');
         })

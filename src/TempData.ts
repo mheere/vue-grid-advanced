@@ -8,6 +8,8 @@ import { GridColumn } from './index';
 export let getRandomArrayEntry = (arr: string[]): string => arr[Math.floor(Math.random() * arr.length)];
 export let getRandomNumber = (max: number, min: number = 0) => Math.floor(Math.random() * (max - min + 1) ) + min;
 
+let noOfTestFields = 40;
+
 // Returns a set of columns that we can hand over to the grid
 export function getColumns(): GridColumn[] {
 
@@ -31,7 +33,7 @@ export function getColumns(): GridColumn[] {
 	col = new GridColumn("valuation", 120, "", "number", "right", "#,##0.00");
 	col.aggregate = "sum";
 	cols.push(col);
-	for(var i = 0 ; i < 3 ; i++) {
+	for(var i = 0 ; i < noOfTestFields ; i++) {
 		cols.push(new GridColumn("test" + i, 70, "", "", ""));
 	}
 
@@ -82,7 +84,7 @@ export function createData(newRowCount: number = 500): any[] {
 			row.valuation = getRandomNumber(10000);
 			row.img = getRandomArrayEntry(arrImages);
 
-			for(var i = 0 ; i<10 ; i++) {
+			for(var i = 0 ; i < noOfTestFields ; i++) {
 				row['test' + i] = getRandomArrayEntry(counties);
 			}
 

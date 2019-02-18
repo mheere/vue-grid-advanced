@@ -3,7 +3,7 @@
 <template>
     <div ref="mygridcell" class='vg-data-cell' v-bind:style='getStyle' :data-col='this.colDef.dbName'>
 
-        <div v-if="!style || style.blankCell" style='flex: 1; order: 1' class="use-inline-block">
+        <div v-if="!style || style.blankCell" style='flex: 1; order: 1' class="use-inline-block agg88">
             
         </div>
 

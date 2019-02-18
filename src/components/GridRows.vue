@@ -1,6 +1,6 @@
 
 <template>
-    <div ref="myrows" :class="['flex-child', 'flex-parent-col', 'vg-row-holder', frozenMode]">
+    <div ref="myrows" :class="['flex-child', 'flex-parent-col', 'vg-row-holder', frozenMode]" >
 
         <div class='vg-row-parent ' v-for="(i, index) in visibleRowCount" :key='index' >
             <GridRow :maxRowCount='maxRowCount' :frozenMode='frozenMode' v-bind:rowNo=getRowNo(index) ></GridRow>
@@ -42,13 +42,12 @@ export default {
         }
     },
     methods: {
-        getRowNo : function (iStart: number) {
+        getRowNo: function (iStart: number) {
             let start = this.$store.state.startRow;
             return start + iStart;
-        }
+        },
     },
     mounted: function() {
-        //debugger;
         rows_height_check = setInterval(checkResizedHeight.bind(this), 500);
     },
     beforeDestroy: function() {

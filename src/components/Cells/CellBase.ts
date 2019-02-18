@@ -16,6 +16,7 @@ export class MyData {
     public iconName: string = "window-minimize";
     public text: string = "";
     public style: CellStyleInfo = undefined;
+    //public scrollBlank: boolean = false;
 }
 
 // define the CellBase
@@ -33,6 +34,12 @@ export const CellBase = Vue.extend({
         },
     },
     computed: {
+        dummyText() {
+            return this.rowNo + ' ' + this.colDef.dbName;
+        },
+        scrollBlank() {
+            return this.colDef.dontRender;
+        },
         hasText() {
             return this.text;
         },
@@ -104,6 +111,8 @@ export const CellBase = Vue.extend({
             // NOTE - IMPORTANT! - ** LEAVE HERE ** - dummy check if we are 'refreshing' - this will trigger a requery of this style!
             // --------------------------------------------------------
             let dummy = this.$store.state.isRefreshData;
+            // --------------------------------------------------------
+
 
             let colDef: GridColumn = this.colDef;
             let settings: VGridSettings = this.$store.state.settings;
@@ -116,10 +125,16 @@ export const CellBase = Vue.extend({
                 width: this.colDef.width + "px",
                 textAlign: this.colDef.align,
                 borderRight: '1px solid lightgray',
-                backgroundColor: (this.rowNo % 2 == 0) ? "white" : "#f5f5f5",
+                //backgroundColor: (this.rowNo % 2 == 0) ? "white" : "#f5f5f5",
                 padding: '0px 3px',
                 fontSize: '1em',
             }
+
+            // 
+            if (this.scrollBlank) return styleBase;
+
+            // only now set the alternating backgroun colour
+            styleBase.backgroundColor = (this.rowNo % 2 == 0) ? "white" : "#f5f5f5"
 
             // get the row we are showing
             let row = this.$store.state.rowsPrepared[this.rowNo];

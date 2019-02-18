@@ -50,6 +50,7 @@ export class GridColumn {
   public frozenRight: boolean = false;
   //public displayable: boolean = true;
   public visible: boolean = true;
+  public dontRender: boolean = false;
   public data: string = "";
   public checkboxConverter: ICheckboxConverter = undefined;
 

@@ -11,12 +11,6 @@
 <script lang="ts">
 import Vue from "vue";
 import GridCellGeneric from './Cells/GridCellGeneric.vue';
-//import GridCellGroupCheckbox from './Cells/GridCellGroupCheckbox.vue';
-// import GridCellString from './Cells/GridCellString.vue';
-// import GridCellNumber from './Cells/GridCellNumber.vue';
-// import GridCellDate from './Cells/GridCellDate.vue';
-// import GridCellImage from './Cells/GridCellImage.vue';
-// import GridCellCheckbox from './Cells/GridCellCheckbox.vue';
 import { GridColumn } from '../GridColumns';
 
 export default Vue.extend({

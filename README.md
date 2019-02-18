@@ -302,13 +302,13 @@ Column headers are now defined through an array of HeaderInfo objects.  These al
 _In future versions any header with the same text as its adjacent cell will be merged._
 
 ```javascript
-// here we already have a GridSettings object that contains our columns
+// NOTE - here we already have a GridSettings object that contains our columns
 // lets freeze the 'code' column to the left and the 'dob' to the right!
-// (isSame is a String prototype entended property testing for case-insensitive equality )
+// (isSame is a String prototype extended property testing for case-insensitive equality )
 settings.columns.find(c => c.dbName.isSame("code")).frozenLeft = true;
 settings.columns.find(c => c.dbName.isSame("dob")).frozenRight = true;
 
-// add some random secondary headers
+// add some random secondary headers (keep the height to be 50 pixels of the second (now top) row)
 let headerSamples = ["AAA", "BBB", "CCC", "DDD"];
 settings.columns.forEach(c => c.headers.push(new HeaderInfo(getRandomArrayEntry(headerSamples), 50, "vert")));
 
