@@ -326,6 +326,7 @@ property | args/value (default) | purpose |
 *columns* | array | Accepts an array of pre-defined GridColumn objects | 
 *idColumn* | string | Specifies the column that will be interpreted as the unique ID column. If none exists then leave this blank and a 'pkvalue' will be generated guaranteeing a unique reference for each row. | 
 *createdGridStructure* | | Accepts a callback that is called once the grid is created and mounted into the DOM | 
+*more* | more.. | more.. | 
 
 
 ___
@@ -337,6 +338,7 @@ Type | Name | args/value (default) | Description |
 | ---- | ------ | ----------- | ----------- | 
 *event* | onChanged | (GridStateInfo) => void | raised when row(s) are selected|
 *method* | setData | rows array | the actual data for the grid to display |
+*more* | more.. | more.. | much more.. |
 
 
 
