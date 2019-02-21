@@ -1,6 +1,7 @@
 
 import Vue from 'vue';
 import Vuex from 'vuex';
+import VueRx from 'vue-rx'
 
 import './styles/flex.css';
 import './styles/demo.scss';
@@ -26,6 +27,7 @@ Vue.config.productionTip = false;
 
 // make Vue aware of Vuex
 Vue.use(Vuex);
+Vue.use(VueRx)
 
 // -----------------------------------------
 // specific exports for npm package

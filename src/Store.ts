@@ -56,7 +56,7 @@ function internalCreateStateInfo(state: VGridState): GridStateInfo {
 		selectedIDValues.push(state.selectedRowID);
 
 	// map 
-	info.selectedRows = _.map(selectedIDValues, id => _.find(state.rowsPrepared, row => row[idColumn] == id));
+	info.selectedRows = _.map(selectedIDValues, id => _.find(state.rowsPrepared, row => row.pkvalue == id));
 
 	return info;
 }
@@ -311,7 +311,7 @@ export default function createStore(state: any) {
 			selectRow(state, info: SelectRowInfo) {
 
 				// clear selections (unless modifier keys are involved)
-				if (info.clearOtherSelections && !info.hasModifierKeys) {
+				if (!state.settings.allowRowMultiSelect || (info.clearOtherSelections && !info.hasModifierKeys)) {
 					state.selectedRow = null;
 					state.selectedRowID = "";
 					state.selectedRowIDs.removeAll();
@@ -343,16 +343,16 @@ export default function createStore(state: any) {
 				if (row) {
 
 					// get the 
-					let idvalue = row.pkvalue;
+					let pkvalue = row.pkvalue;
 					//let idvalue = getRowIDValue(state, row);
 
-					if (info.hasModifierKeys) {
+					if (info.hasModifierKeys && state.settings.allowRowMultiSelect) {
 
 						if (info.ctrlKey) {
-							if (state.selectedRowIDs.includes(idvalue))
-								state.selectedRowIDs.remove(idvalue);
+							if (state.selectedRowIDs.includes(pkvalue))
+								state.selectedRowIDs.remove(pkvalue);
 							else
-								state.selectedRowIDs.push(idvalue);
+								state.selectedRowIDs.push(pkvalue);
 						}
 
 						if (info.shiftKey && state.selectedRowID) {
@@ -366,17 +366,18 @@ export default function createStore(state: any) {
 							range.push(endRowNo);			// lodash does not include the end so we do this by hand..
 
 							range.forEach(r => {
-								let idvalue = state.rowsPrepared[r].pkvalue;	
-								if (!state.selectedRowIDs.includes(idvalue))
-									state.selectedRowIDs.push(idvalue);
+								let pkvalue = state.rowsPrepared[r].pkvalue;	
+								if (!state.selectedRowIDs.includes(pkvalue))
+									state.selectedRowIDs.push(pkvalue);
 							});
 							
 						}
 
 					}
 					else {
-						state.selectedRowID = idvalue;
+						state.selectedRowID = pkvalue;
 						state.selectedRow = row;
+						state.selectedRowIDs.push(pkvalue);
 					}
 				}
 

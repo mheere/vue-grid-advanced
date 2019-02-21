@@ -1,8 +1,10 @@
 import Vue from "vue";
 import * as $ from 'jquery';
 import * as R from 'ramda';
-import * as rxjs from 'rxjs';
-import * as numeral from 'numeral'; // test
+//import { Observable, fromEvent } from 'rxjs';
+// import { Observable, fromEvent } from 'rxjs';
+// import { buffer, bufferTime, debounce, debounceTime, map, filter } from 'rxjs/operators';
+import * as numeral from 'numeral';     // test
 import * as moment from "moment";
 import { SelectRowInfo, VGridManager, VGridSettings, CellStyleInfo, GridColumn } from '../../index';
 
@@ -283,6 +285,10 @@ export const CellBase = Vue.extend({
 
         // define a clicked handler
         let clickedRow = (e, isDblClk = false) => {
+
+            console.log("clicked row", isDblClk);
+            //return;
+
             // read out the actual rowno
             let rowNo = this._$cell.closest('.vg-row').attr('data-rowno');
             let coldb = this._$cell.closest('.vg-data-cell').attr('data-col');
@@ -293,9 +299,10 @@ export const CellBase = Vue.extend({
 
             if (isDblClk)
                 info.dblClickedColumn = coldb;
-            // info.altKey = e.altKey;
-            // info.ctrlKey = e.ctrlKey;
-            // info.shiftKey = e.shiftKey;
+                
+            info.altKey = e.altKey;
+            info.ctrlKey = e.ctrlKey;
+            info.shiftKey = e.shiftKey;
             info.rowNo = Number.parseInt(rowNo);
 
             // tell the store to update itself with the selection
@@ -311,7 +318,24 @@ export const CellBase = Vue.extend({
 
         // attach handlers
         $(this._$cell).on("click", (e) => clickedRow(e));
-        $(this._$cell).on("dblclick", (e) => clickedRow(e, true));
+        //$(this._$cell).on("dblclick", (e) => clickedRow(e, true));
+
+        
+        // let clicks$ = fromEvent(this.$refs.mygridcell, 'click');
+
+        // let debounce$ = clicks$.pipe(
+        //     debounceTime(300)
+        // )
+
+        // let doubleClicks$ = clicks$.pipe(
+        //     buffer( debounce$ ),
+        //     map(clicksWithin300ms => clicksWithin300ms.length),
+        //     filter(clicksWithin300ms => clicksWithin300ms === 2)
+        // );
+
+        // clicks$.subscribe(() => console.log("clicked"));
+        // doubleClicks$.subscribe(() => console.log("double clicked"));
+  
 
     },
     beforeDestroy: function() {

@@ -18,7 +18,7 @@ A simple grid can be created in code like this:
 ```javascript
 let settings = new VGridSettings();
 
-// the actual DOM element the grid will be injected into
+// the actual DOM element the grid will be injected into (or a selector)
 settings.el = ".test-grid-1";	
 
 // hand over a set of predefined columns
@@ -345,6 +345,7 @@ Type | Name | args/value (default) | Description |
 
 |version | date | notes |
 | ---- | ------ | ------ |
+v 0.0.6 | 21 Feb 2018 | implemented 'allowRowMultiSelect' and collect selected rows (in GridStateInfo)
 v 0.0.5 | 09 Feb 2018 | Export the HeaderInfo...
 v 0.0.4 | 08 Feb 2018 | Frozen columns and multiple headers
 v 0.0.3 | 23 Jan 2018 | project structure changes - some api updates

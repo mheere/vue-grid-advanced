@@ -3,6 +3,8 @@ import Vue from 'vue';
 import {Store} from 'vuex';
 import * as __core from './core';
 import { VGridManager, GridStateInfo, VGridSettings, SelectRowInfo, UpdateRowInfo, FindRowInfo } from './index';
+import { Observable, fromEvent } from 'rxjs';
+import { buffer, bufferTime, debounce, debounceTime, map, filter } from 'rxjs/operators';
 
 
 // ---------------------------------------------------
@@ -31,6 +33,8 @@ export class VGrid {
 				this.onChanged(newV);
 		})
 
+		//this.store.$watchAsObservable('aa').subscribe(( {newValue, oldValue }) => console.log(newValue, oldValue));
+
 		// if the user wishes to see the last refresh time then start the interval
 		if (settings.showLastRefreshTime)
 			this.startLastDataRefresh();
@@ -42,6 +46,23 @@ export class VGrid {
 	private store: Store<any> = null;
 	private lapsedInterval: any = undefined;	// ref to the interval so we can reset it
 	private lapsedMinutes: number = 0;          // used to indicate last refresh of data
+
+	private fireGridStateInfo(newV: GridStateInfo) {
+        // let clicks$ = fromEvent(this.$refs.mygridcell, 'click');
+
+        // let debounce$ = clicks$.pipe(
+        //     debounceTime(300)
+        // )
+
+        // let doubleClicks$ = clicks$.pipe(
+        //     buffer( debounce$ ),
+        //     map(clicksWithin300ms => clicksWithin300ms.length),
+        //     filter(clicksWithin300ms => clicksWithin300ms === 2)
+        // );
+
+        // clicks$.subscribe(() => console.log("clicked"));
+        // doubleClicks$.subscribe(() => console.log("double clicked"));
+	}
 
 	public getCheckedItems(): string[] {
 		let arr: string[] = [];

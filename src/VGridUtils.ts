@@ -230,7 +230,7 @@ export class VGridSettings {
 	public showControlBar: boolean = true;          // set to false to hide the entire bottom control bar
 	public colourRowSelect: boolean = true;         // if true it shows the selected row in 'orange' if false, no colour...
 	public allowRowSelect: boolean = true;          // if false it will block selection of rows full stop
-	public allowRowMultiSelect: boolean = false;    // if false it will block multi-row selection
+	public allowRowMultiSelect: boolean = true;    // if false it will block multi-row selection
 	//public customTemplateMinWidth: number = 100;    // specifies the minimum width of the custom template in the top of grid
 	public showCellContentOnDblClick = false;       // if true it will show the full cellcontent when double clicked..
 	public showCellContentOnDblClickCols: any[] = [];      // an array of columns that upon dbl click will show the content of that cell.
