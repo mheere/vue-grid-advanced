@@ -159,6 +159,7 @@ export default function createStore(state: any) {
 
 						let coltype: string = "string";
 						if (isNumber(item)) coltype = "number";
+						// *** extend this ****
 
 						let col: GridColumn = new GridColumn(key, 80, key, coltype);
 						state.columns.push(col);
