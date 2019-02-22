@@ -17,7 +17,7 @@ let createGrid = function() {
     settings.el = ".test-grid-1";	// either a class/id identifier or the actual html element
 
     // specify which columns to use
-    //settings.columns = getColumns();
+    settings.columns = getColumns();
 
     // ------------------------
     // test functions
@@ -151,6 +151,7 @@ let createGrid = function() {
 // -----------------------------------------------------------------------------------------
 
 let vgrid;
+let _settings: string = "";
 
 let setData = (count: number = 5000) => {
 	console.log('setData - init');
@@ -173,13 +174,20 @@ xx('btnDestroyGrid', () => vgrid.destroy());
 xx('btnGroup1', () => vgrid.setGroupColumns(['currency']));
 xx('btnGroup2', () => vgrid.setGroupColumns(['currency', 'county']));
 xx('btnUnGroup10', () => vgrid.setGroupColumns([]));
-//xx('btnRefresh', () => vgrid.refresh());
 xx('btnUnfreeze', () => {
     vgrid.destroy();
     testFrozenLeft = false;
     testFrozenRight = false;
     createGrid();
 });
+
+//xx('btnUnGroup10', () => _settings = vgrid.getSettings());
+// xx('btnUnfreeze', () => {
+//      debugger;
+//      let data = createData(10);
+//      vgrid.setData(data, null, _settings);
+// });
+
 xx('btnFreezeCode', () => {
     vgrid.destroy();
     testFrozenLeft = true;

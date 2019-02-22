@@ -78,7 +78,10 @@ export class VGrid {
 	public selectRow(info: SelectRowInfo) {
 		this.store.commit("selectRow", info);
 	}
-	public setData(rows: any, cols: GridColumn[] = []) {
+	public setData(rows: any, cols: GridColumn[] = [], settings: string = "") {
+		if (settings) {
+			cols = JSON.parse(settings);
+		}
 		this.store.dispatch("setData", { rows, cols });
 		this.startLastDataRefresh();
 	}
@@ -107,9 +110,7 @@ export class VGrid {
 		this.store.dispatch("updateData", info);
 	}
 	public getSettings(): string {
-		//debugger;
-		let columns = JSON.stringify(this.store.state.columns);
-		return columns;
+		return JSON.stringify(this.store.state.columns);
 	}
 	public destroy() {
 		
