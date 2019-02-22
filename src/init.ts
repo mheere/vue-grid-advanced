@@ -17,7 +17,7 @@ let createGrid = function() {
     settings.el = ".test-grid-1";	// either a class/id identifier or the actual html element
 
     // specify which columns to use
-    settings.columns = getColumns();
+    //settings.columns = getColumns();
 
     // ------------------------
     // test functions

@@ -7,6 +7,7 @@ import * as VEngine from './engine/engine';
 import * as R from 'ramda'
 import * as _ from 'lodash';
 import * as __core from './core';
+import { isNumber } from 'util';
 
 
 // -------------------------------------------------
@@ -130,12 +131,41 @@ export default function createStore(state: any) {
 			increment (context) {
 				context.commit('increment')
 			},
-			setData(context, rows: any) {
+			setData(context, data: any) {
+
+				let rows = data.rows;
+				let cols = data.cols;
 
 				let state = context.state;
 
 				if (!Array.isArray(rows))
 					throw new Error("Incoming rows expected to be an array!");
+
+				// -----------------------------------------------
+				// check if columns are given and if they are override any current ones.
+				// if no columns are given and we don't have current col defs then create
+				// these based on the first row of data given.
+				// -----------------------------------------------
+				if (cols && cols.length > 0) 
+					state.columns = cols;
+				
+				// if there are no columns known then create them based on row0
+				if (state.columns.length == 0) {
+					// 
+					
+					for (var key in rows[0]) {
+						
+						let item = rows[0][key];
+
+						let coltype: string = "string";
+						if (isNumber(item)) coltype = "number";
+
+						let col: GridColumn = new GridColumn(key, 80, key, coltype);
+						state.columns.push(col);
+					}
+
+				}
+
 				
 				// ----------------------------------------------
 				// EVERY row NEEDS an own internal unique identifier.  I call this the pkvalue.  This is needed for instance when

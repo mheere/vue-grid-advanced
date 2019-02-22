@@ -5,6 +5,7 @@ import * as __core from './core';
 import { VGridManager, GridStateInfo, VGridSettings, SelectRowInfo, UpdateRowInfo, FindRowInfo } from './index';
 import { Observable, fromEvent } from 'rxjs';
 import { buffer, bufferTime, debounce, debounceTime, map, filter } from 'rxjs/operators';
+import { GridColumn } from './GridColumns';
 
 
 // ---------------------------------------------------
@@ -77,8 +78,8 @@ export class VGrid {
 	public selectRow(info: SelectRowInfo) {
 		this.store.commit("selectRow", info);
 	}
-	public setData(rows: any) {
-		this.store.dispatch("setData", rows);
+	public setData(rows: any, cols: GridColumn[] = []) {
+		this.store.dispatch("setData", { rows, cols });
 		this.startLastDataRefresh();
 	}
 	public setGroupColumns(cols: string[]) {
