@@ -65,13 +65,14 @@ export class VGridManager {
 		
 		// if a previous columns state was handed in then apply that
 		if (settings.settings) {
+			debugger;
 			let colsTemp = JSON.parse(settings.settings);
 			mystate.columns = _.map(colsTemp, colitem => GridColumn.create(colitem));
 		}
 		else
 			mystate.columns = settings.columns;
 
-		// hang on to the incoming v-settings object through the state so we can
+		// importatnt! - hang on to the incoming v-settings object through the state so we can
 		// access this easily deeper down in the widgets...
 		mystate.settings = settings;
 

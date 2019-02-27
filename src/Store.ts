@@ -127,200 +127,10 @@ export default function createStore(state: any) {
 			},
 			getGridStateInfoIdentifier: state => () => state.gridStateInfo,
 		},
-		actions: {
-			increment (context) {
-				context.commit('increment')
-			},
-			setData(context, data: any) {
-
-				let rows = data.rows;
-				let cols = data.cols;
-
-				let state = context.state;
-
-				if (!Array.isArray(rows))
-					throw new Error("Incoming rows expected to be an array!");
-
-				// -----------------------------------------------
-				// check if columns are given and if they are override any current ones.
-				// if no columns are given and we don't have current col defs then create
-				// these based on the first row of data given.
-				// -----------------------------------------------
-				if (cols && cols.length > 0) 
-					state.columns = cols;
-				
-				// if there are no columns known then create them based on row0
-				if (state.columns.length == 0) {
-					// 
-					
-					for (var key in rows[0]) {
-						
-						let item = rows[0][key];
-
-						let coltype: string = "string";
-						if (isNumber(item)) coltype = "number";
-						// *** extend this ****
-
-						let col: GridColumn = new GridColumn(key, 80, key, coltype);
-						state.columns.push(col);
-					}
-
-				}
-
-				
-				// ----------------------------------------------
-				// EVERY row NEEDS an own internal unique identifier.  I call this the pkvalue.  This is needed for instance when
-				// grouping occurrs which will introduce sub-header rows that need a unique ID for easy reference.
-				// So if the user has not identified a unique idColumn then we set the 'pkvalue' identifier to be the idColumn
-				// ----------------------------------------------
-				if (!state.settings.idColumn) state.settings.idColumn = "pkvalue";
-
-				// ensure each row has a unique pkvalue property
-				rows.forEach((row, i) => {
-					if (!R.has('pkvalue', row))
-						row.pkvalue = (i.toString()).padStart(12, "0");
-				});
-
-				// find the current selected row and try to reselect that row
-				let idCol = state.settings.idColumn;
-				let selRowInfo: SelectRowInfo = new SelectRowInfo();
-				if (state.selectedRowID) {
-					selRowInfo.findIDValue = state.selectedRowID;
-					selRowInfo.findIDColumn = idCol;
-				}
-				
-				// hand over the rows to the state
-				state.rowsRaw = rows;
-
-				// run the engine to prepare the correct visible state
-				context.commit("runEngine");
-				context.commit("moveSelectedRowIntoView");
-
-				// make a sensible row selection
-				context.commit("selectRow", selRowInfo);
-
-			},
-			setSortColumn(context, colName) {
-				
-				let state = context.state;
-				
-				// find the colName
-				let match: GridColumn = getColumn(state, colName);
-
-				// if we are already sorting then reverse the sort
-				if (match.sortDirection.length > 0)
-					match.reverseSort();
-				else {
-					// clear any existing sorting
-					_.each(state.columns, (column: GridColumn) => column.sortDirection = "");
-					// start sort in asc order
-					match.sortDirection = "asc";
-				}
-				
-				context.commit("runEngine");
-				context.commit("moveSelectedRowIntoView");
-			},
-			setGroupColumns(context, cols: string[]) {
-				
-				let state = context.state;
-				state.groupingColumns = cols;
-				
-				context.commit("runEngine");
-				context.commit("moveSelectedRowIntoView");
-			},
-			addGroupColumn(context, dbName: string) {
-				context.state.groupingColumns.push(dbName);
-				context.commit("runEngine");
-				context.commit("moveSelectedRowIntoView");
-			},
-			removeGroupColumn(context, dbName: string) {
-				context.state.groupingColumns.remove(dbName);
-				context.commit("runEngine");
-				context.commit("moveSelectedRowIntoView");
-			},
-			reGroupColumn(context, info: any){
-				//  { source: colSource, dest: colDest 
-				let state = context.state;
-				let posSource = state.groupingColumns.indexOf(info.source);
-				let posDest = state.groupingColumns.indexOf(info.dest);
-
-				state.groupingColumns.remove(info.source);
-				state.groupingColumns.splice(posDest , 0, info.source);
-
-				// // moving 'left'
-				// if (posDest < posSource) {
-				// 	state.groupingColumns.splice(posDest , 0, info.source);
-				// }
-				// else {	// moving 'right'
-				// 	state.groupingColumns.splice(posDest , 0, info.source);
-				// }
-				
-				context.commit("runEngine");
-				context.commit("moveSelectedRowIntoView");
-			},
-			setExpandCollapse(context, rowNo: number) {
-				
-				// let rowNo: number = info.rowNo;
-				// let action: string = info.action;
-
-				let state = context.state;
-				let row = state.rowsPrepared[rowNo];
-				let groupKey = row.__groupKey;
-
-				if (state.collapsedHeaders.includes(groupKey))
-					state.collapsedHeaders.remove(groupKey);
-				else
-					state.collapsedHeaders.push(groupKey);
-				
-				context.commit("runEngine");
-				context.commit("moveSelectedRowIntoView");
-			},
-			updateData(context, info: UpdateRowInfo) {
-
-				let state = context.state;
-				let index = -1;
-
-				// if an updated row is given then first find that row in our set then update all fields
-				if (info.updatedRow) {
-
-					// find the correct row
-					let idCol = state.settings.idColumn;
-
-					// find the index of the row
-					index = state.rowsPrepared.findIndex((row: any) => row[idCol] == info.updatedRow[idCol]);
-
-					if (index > -1) {
-						R.keys(info.updatedRow).forEach(key => {
-							state.rowsPrepared[index][key] = info.updatedRow[key];
-						})
-					}
-				}
-				// if a new row was given then simply add this to the rawlist
-				else if (info.newRow) {
-					
-					// if incoming row has no pkvalue then create one at random
-					let i = __core.getRandomNumber(10000000000, 99999999999);
-					if (!R.has('pkvalue', info.newRow))
-						info.newRow.pkvalue = (i.toString()).padStart(12, "0");
-
-					state.rowsRaw.push(info.newRow);
-				}
-				// caller wishes to update a single cell and hands over the find Column/Value and the update Column/Value
-				else if (info.findIDValue) {
-					// find the correct row
-					let idCol = info.findIDColumn ? info.findIDColumn : state.settings.idColumn;
-					index = state.rowsPrepared.findIndex((row: any) => row[idCol] == info.findIDValue);
-
-					if (index > -1) 
-						state.rowsPrepared[index][info.columnToUpdate] = info.columnNewValue;
-				}
-
-				if (!info.ignoreEngineUpdate)
-					context.commit("runEngine");
-
-			},
-		},
 		mutations: {
+			// *******************************************************
+			// ** Mutations expect two arguments: state and payload ** - commit('<name>', obj)
+			// *******************************************************
 			moveSelectedRowIntoView(state) {
 				if (!state.selectedRowID) return;
 
@@ -495,6 +305,12 @@ export default function createStore(state: any) {
 			updateShowGrouperBar(state, newValue) {
 				state.showGrouperBar = newValue;
 			},
+			showAllColumns(state) {
+				state.columns.forEach((column: GridColumn) => column.visible = true);
+			},
+			hideAllColumns(state) {
+				state.columns.forEach((column: GridColumn) => column.visible = false);
+			},
 			resortColumn(state) {
 
 				// ------------------
@@ -550,8 +366,217 @@ export default function createStore(state: any) {
 				state.showGridColumns = false;
 				state.showGridSettings = !state.showGridSettings;
 			},
-			
-		}
+		},
+		actions: {
+			// *******************************************************
+			// ** Actions expect two arguments: state and payload ** dispatch('<name>', obj)
+			// *******************************************************
+			increment (context) {
+				context.commit('increment')
+			},
+			setData({ state, commit }, data: any) {
+
+				//debugger;
+				let rows = data.rows;
+				let cols = data.cols;
+
+				if (!Array.isArray(rows))
+					throw new Error("Incoming rows expected to be an array!");
+
+				// -----------------------------------------------
+				// check if columns are given and if they are override any current ones.
+				// if no columns are given and we don't have current col defs then create
+				// these based on the first row of data given.
+				// -----------------------------------------------
+				if (cols && cols.length > 0) 
+					state.columns = cols;
+				
+				// if there are no columns known then create them based on row0
+				if (state.columns.length == 0) {
+					// 
+					
+					for (var key in rows[0]) {
+						
+						let item = rows[0][key];
+
+						let coltype: string = "string";
+						if (isNumber(item)) coltype = "number";
+						// *** extend this ****
+
+						let col: GridColumn = new GridColumn(key, 80, key, coltype);
+						state.columns.push(col);
+					}
+
+				}
+
+				
+				// ----------------------------------------------
+				// EVERY row NEEDS an own internal unique identifier.  I call this the pkvalue.  This is needed for instance when
+				// grouping occurrs which will introduce sub-header rows that need a unique ID for easy reference.
+				// So if the user has not identified a unique idColumn then we set the 'pkvalue' identifier to be the idColumn
+				// ----------------------------------------------
+				if (!state.settings.idColumn) state.settings.idColumn = "pkvalue";
+
+				// ensure each row has a unique pkvalue property
+				rows.forEach((row, i) => {
+					if (!R.has('pkvalue', row))
+						row.pkvalue = (i.toString()).padStart(12, "0");
+				});
+
+				// find the current selected row and try to reselect that row
+				let idCol = state.settings.idColumn;
+				let selRowInfo: SelectRowInfo = new SelectRowInfo();
+				if (state.selectedRowID) {
+					selRowInfo.findIDValue = state.selectedRowID;
+					selRowInfo.findIDColumn = idCol;
+				}
+				
+				// hand over the rows to the state
+				state.rowsRaw = rows;
+
+				// run the engine to prepare the correct visible state
+				commit("runEngine");
+				commit("moveSelectedRowIntoView");
+
+				// make a sensible row selection
+				commit("selectRow", selRowInfo);
+
+			},
+			setSortColumn(context, colName) {
+				
+				let state = context.state;
+				
+				// find the colName
+				let match: GridColumn = getColumn(state, colName);
+
+				// if we are already sorting then reverse the sort
+				if (match.sortDirection.length > 0)
+					match.reverseSort();
+				else {
+					// clear any existing sorting
+					_.each(state.columns, (column: GridColumn) => column.sortDirection = "");
+					// start sort in asc order
+					match.sortDirection = "asc";
+				}
+				
+				context.commit("runEngine");
+				context.commit("moveSelectedRowIntoView");
+			},
+			// setColumns(context, cols: string[]) {
+				
+			// 	let state = context.state;
+			// 	state.columns = cols;
+				
+			// 	context.commit("runEngine");
+			// 	context.commit("moveSelectedRowIntoView");
+			// },
+			setGroupColumns(context, cols: string[]) {
+				
+				let state = context.state;
+				state.groupingColumns = cols;
+				
+				context.commit("runEngine");
+				context.commit("moveSelectedRowIntoView");
+			},
+			addGroupColumn(context, dbName: string) {
+				context.state.groupingColumns.push(dbName);
+				context.commit("runEngine");
+				context.commit("moveSelectedRowIntoView");
+			},
+			removeGroupColumn(context, dbName: string) {
+				context.state.groupingColumns.remove(dbName);
+				context.commit("runEngine");
+				context.commit("moveSelectedRowIntoView");
+			},
+			setStyle({ state, commit }, obj) {
+				state.columns = obj.columns || [];
+				state.groupingColumns = obj.groupingColumns || [];
+				commit("runEngine");
+				commit("moveSelectedRowIntoView");
+			},
+			reGroupColumn(context, info: any){
+				//  { source: colSource, dest: colDest 
+				let state = context.state;
+				let posSource = state.groupingColumns.indexOf(info.source);
+				let posDest = state.groupingColumns.indexOf(info.dest);
+
+				state.groupingColumns.remove(info.source);
+				state.groupingColumns.splice(posDest , 0, info.source);
+
+				// // moving 'left'
+				// if (posDest < posSource) {
+				// 	state.groupingColumns.splice(posDest , 0, info.source);
+				// }
+				// else {	// moving 'right'
+				// 	state.groupingColumns.splice(posDest , 0, info.source);
+				// }
+				
+				context.commit("runEngine");
+				context.commit("moveSelectedRowIntoView");
+			},
+			setExpandCollapse(context, rowNo: number) {
+				
+				// let rowNo: number = info.rowNo;
+				// let action: string = info.action;
+
+				let state = context.state;
+				let row = state.rowsPrepared[rowNo];
+				let groupKey = row.__groupKey;
+
+				if (state.collapsedHeaders.includes(groupKey))
+					state.collapsedHeaders.remove(groupKey);
+				else
+					state.collapsedHeaders.push(groupKey);
+				
+				context.commit("runEngine");
+				context.commit("moveSelectedRowIntoView");
+			},
+			updateData(context, info: UpdateRowInfo) {
+
+				let state = context.state;
+				let index = -1;
+
+				// if an updated row is given then first find that row in our set then update all fields
+				if (info.updatedRow) {
+
+					// find the correct row
+					let idCol = state.settings.idColumn;
+
+					// find the index of the row
+					index = state.rowsPrepared.findIndex((row: any) => row[idCol] == info.updatedRow[idCol]);
+
+					if (index > -1) {
+						R.keys(info.updatedRow).forEach(key => {
+							state.rowsPrepared[index][key] = info.updatedRow[key];
+						})
+					}
+				}
+				// if a new row was given then simply add this to the rawlist
+				else if (info.newRow) {
+					
+					// if incoming row has no pkvalue then create one at random
+					let i = __core.getRandomNumber(10000000000, 99999999999);
+					if (!R.has('pkvalue', info.newRow))
+						info.newRow.pkvalue = (i.toString()).padStart(12, "0");
+
+					state.rowsRaw.push(info.newRow);
+				}
+				// caller wishes to update a single cell and hands over the find Column/Value and the update Column/Value
+				else if (info.findIDValue) {
+					// find the correct row
+					let idCol = info.findIDColumn ? info.findIDColumn : state.settings.idColumn;
+					index = state.rowsPrepared.findIndex((row: any) => row[idCol] == info.findIDValue);
+
+					if (index > -1) 
+						state.rowsPrepared[index][info.columnToUpdate] = info.columnNewValue;
+				}
+
+				if (!info.ignoreEngineUpdate)
+					context.commit("runEngine");
+
+			},
+		},
+		
 	});
 
 	return vstore;

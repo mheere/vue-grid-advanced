@@ -85,6 +85,7 @@ export class GridColumn {
                             x.header, x.type, x.align, x.format, x.sortDirection);
       col.order = Number.parseInt(x.order);
       col.visible = x.visible;
+      col.aggregate = x.aggregate;
       return col;
   }
 

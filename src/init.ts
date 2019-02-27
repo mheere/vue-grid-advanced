@@ -151,7 +151,7 @@ let createGrid = function() {
 // -----------------------------------------------------------------------------------------
 
 let vgrid;
-let _settings: string = "";
+let _style: any = undefined;
 
 let setData = (count: number = 5000) => {
 	console.log('setData - init');
@@ -173,20 +173,36 @@ xx('btnDestroyGrid', () => vgrid.destroy());
 //xx('btnGetSettings', () => _col_settings = vgrid.getSettings());
 xx('btnGroup1', () => vgrid.setGroupColumns(['currency']));
 xx('btnGroup2', () => vgrid.setGroupColumns(['currency', 'county']));
-xx('btnUnGroup10', () => vgrid.setGroupColumns([]));
+xx('btnUnGroup', () => vgrid.setGroupColumns([]));
 xx('btnUnfreeze', () => {
     vgrid.destroy();
     testFrozenLeft = false;
     testFrozenRight = false;
     createGrid();
 });
+xx('btnGetStyle', () => _style = vgrid.getStyle(true));
+xx('btnSetStyle', () => vgrid.setStyle(_style));
+
 
 //xx('btnUnGroup10', () => _settings = vgrid.getSettings());
 // xx('btnUnfreeze', () => {
 //      debugger;
+//      vgrid.destroy();
+
+//      let settings: VGridSettings = new VGridSettings();
+//      settings.friendlyName = "friendly";					// a friendly name, handy if you have a collection of grids you want to hold on to
+//      settings.el = ".test-grid-1";
+
+//      // create a new VGrid (based on the settings)
+//      vgrid = new VGrid(settings);
+
 //      let data = createData(10);
-//      vgrid.setData(data, null, _settings);
+//      vgrid.setData(data, "hello");
+//      //vgrid.setData(data, null, _settings);
 // });
+
+
+//----------------------------------------------------
 
 xx('btnFreezeCode', () => {
     vgrid.destroy();

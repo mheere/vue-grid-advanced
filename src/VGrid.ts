@@ -102,15 +102,33 @@ export class VGrid {
 	}
 	public getRow(info: FindRowInfo): any {
 		let state = this.store.state;
-		let idCol = info.findIDColumn ? info.findIDColumn : state.settings.idColumn;		// get the column to look for
+		let idCol = info.findIDColumn ? info.findIDColumn : state.settings.idColumn;			// get the column to look for
 		let row = state.rowsPrepared.findItem((row: any) => row[idCol] == info.findIDValue);	// return the found row
 		return __core.deepClone(row);
 	}
 	public updateData(info: UpdateRowInfo) {
 		this.store.dispatch("updateData", info);
 	}
-	public getSettings(): string {
-		return JSON.stringify(this.store.state.columns);
+	public getStyle(serialised: boolean = false): Object {
+		let obj = {
+			columns: __core.deepClone(this.store.state.columns),
+			groupingColumns: __core.deepClone(this.store.state.groupingColumns),
+		};
+		if (serialised) return JSON.stringify(obj);
+		return obj;
+	}
+	public setStyle(style: any) {
+		// check if incoming style is a serialised style - if so, parse it back to an object
+		if (typeof style === 'string' || style instanceof String)
+			style = JSON.parse(style.toString());
+
+		// if the incoming columns are a serialised set then we need to create 'real' ones first
+		// check if col supports read-only property 'isString', if it does not then create a new GridColumn
+		if (style.columns && style.columns.length > 0 && !style.columns[0].hasOwnProperty('isString')) 
+			style.columns = style.columns.map(c => GridColumn.create(c));	// convert all columns to 'real' ones
+		
+		// pass the style down to the store
+		this.store.dispatch("setStyle", style);
 	}
 	public destroy() {
 		

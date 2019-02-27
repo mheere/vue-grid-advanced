@@ -162,6 +162,8 @@ export default Vue.extend({
 			stop: function(event: any, ui: any) {
 				// tell the store we have stopped resizing a column
 				store.commit("setColumnIsBeingResized", false);
+				// 
+				$colResizeMarker.css("left", "");
 			},
 			drag: function(event: any, ui: any) {
 				// calculate the new col width

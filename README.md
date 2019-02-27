@@ -347,6 +347,8 @@ Type | Name | args/value (default) | Description |
 
 |version | date | notes |
 | ---- | ------ | ------ |
+v 0.0.8 | 27 Feb 2018 | getStyle & setStyle so 'snapshots' can be taken and reapplied of the state of the grid
+v 0.0.7 | 22 Feb 2018 | implemented getSettings and handing these with setData rather than in VGridSettings
 v 0.0.6 | 21 Feb 2018 | implemented 'allowRowMultiSelect' and collect selected rows (in GridStateInfo)
 v 0.0.5 | 09 Feb 2018 | Export the HeaderInfo...
 v 0.0.4 | 08 Feb 2018 | Frozen columns and multiple headers

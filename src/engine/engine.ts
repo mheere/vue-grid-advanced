@@ -13,8 +13,8 @@ import { VGridManager } from '../VGridManager';
 
 export class VueGridEngine {
     
-    private sortColumn: string = "";
-    private sortDirection: string = "";
+    // private sortColumn: string = "";
+    // private sortDirection: string = "";
     //private groupingColumns: string[] = [];
     
     // ----------------------------------
@@ -83,8 +83,8 @@ export class VueGridEngine {
 
     private setSortColumnDetails(rows: any, cols: GridColumn[]): any {
         let match: GridColumn = _.find(cols, (column: GridColumn) => column.sortDirection.length > 0);
-        this.sortColumn = match ? match.dbName : ""
-        this.sortDirection = match ? match.sortDirection : ""  
+        let sortColumn = match ? match.dbName : ""
+        let sortDirection = match ? match.sortDirection : ""  
         if (!match) return rows;
 
         // do a nasty quick check if this is a date make sure there are no 'null' values
@@ -96,7 +96,7 @@ export class VueGridEngine {
         }
 
         let enumerableGroup = Enumerable.from(rows);
-        enumerableGroup = performEnumerableSort(enumerableGroup, this.sortColumn, this.sortDirection);
+        enumerableGroup = performEnumerableSort(enumerableGroup, sortColumn, sortDirection);
         rows = enumerableGroup.toArray();
 
         // undo the nasty trick
