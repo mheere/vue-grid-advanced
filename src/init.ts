@@ -19,6 +19,8 @@ let createGrid = function() {
     // specify which columns to use
     settings.columns = getColumns();
 
+    settings.style = _style;
+
     // ------------------------
     // test functions
     // ------------------------

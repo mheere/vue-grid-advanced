@@ -23,9 +23,8 @@ export class VueGridEngine {
     public processData(rows: any[], options: EngineOptions): VueEngineResult {
         
         // hand over
-        //this.groupingColumns = options.groupingColumns;
-        if (VGridManager.x)
-            return new VueEngineResult([], {}, {});
+        //if (VGridManager.x)
+        //    return new VueEngineResult([], {}, {});
 
         // 1. prepare raw rows (clones the given rows!)
         rows = this.prepareRows(rows)

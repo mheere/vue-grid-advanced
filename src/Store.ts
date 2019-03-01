@@ -18,6 +18,23 @@ function getColumn(state: any, colName: string): GridColumn {
 	return _.find(state.columns, (column: GridColumn) => column.dbName.isSame(colName));
 }
 
+function getAllColumns(row: any) {
+	let columns: GridColumn[] = [];
+
+	for (var key in row) {
+						
+		let item = row[key];
+
+		let coltype: string = "string";
+		if (isNumber(item)) coltype = "number";
+		// *** extend this ****
+
+		let col: GridColumn = new GridColumn(key, 80, key, coltype);
+		columns.push(col);
+	}
+	return columns;
+}
+
 function doRefresh(state: any) {
 	state.isRefreshData = true;
 	setTimeout(	() => state.isRefreshData = false, 0)
@@ -392,23 +409,8 @@ export default function createStore(state: any) {
 					state.columns = cols;
 				
 				// if there are no columns known then create them based on row0
-				if (state.columns.length == 0) {
-					// 
-					
-					for (var key in rows[0]) {
-						
-						let item = rows[0][key];
-
-						let coltype: string = "string";
-						if (isNumber(item)) coltype = "number";
-						// *** extend this ****
-
-						let col: GridColumn = new GridColumn(key, 80, key, coltype);
-						state.columns.push(col);
-					}
-
-				}
-
+				if (state.columns.length == 0 && rows && rows.length > 0) 
+					state.columns = getAllColumns(rows[0])
 				
 				// ----------------------------------------------
 				// EVERY row NEEDS an own internal unique identifier.  I call this the pkvalue.  This is needed for instance when
@@ -489,8 +491,17 @@ export default function createStore(state: any) {
 				context.commit("moveSelectedRowIntoView");
 			},
 			setStyle({ state, commit }, obj) {
-				state.columns = obj.columns || [];
+				// if I pass in columns then apply these and that's it
+				if (obj.columns && obj.columns.length > 0)
+					state.columns = obj.columns;
+
+				// if I didn't supply columns but I have a row of data then create columns for each
+				else if (state.rowsPrepared.length > 0) 
+					state.columns = getAllColumns(state.rowsPrepared[0])
+
+				// hand over the grouping columns
 				state.groupingColumns = obj.groupingColumns || [];
+
 				commit("runEngine");
 				commit("moveSelectedRowIntoView");
 			},

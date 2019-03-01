@@ -14,8 +14,6 @@ import createStore from './Store';
 // -------------------------------------------------------
 export class VGridManager {
 	
-	static x: boolean = false;		// used by engine\engine.ts(28,26)
-
 	static processCurrency(row, colDef, settings: VGridSettings, style: CellStyleInfo) {
             let colName: string = colDef.dbName;
             let colCurrLookup = settings.currencyLookupColumn;
@@ -47,6 +45,27 @@ export class VGridManager {
             
 	}
 
+	static verifyStyle(style: any) {
+		// if no style was given then create a dummy one
+		if (!style) {
+			style = {
+				columns: [],
+				groupingColumns: []
+			}
+		}
+			
+		// check if incoming style is a serialised style - if so, parse it back to an object
+		if (typeof style === 'string' || style instanceof String)
+			style = JSON.parse(style.toString());
+
+		// if the incoming columns are a serialised set then we need to create 'real' ones first
+		// check if col supports read-only property 'isString', if it does not then create a new GridColumn
+		if (style.columns && style.columns.length > 0 && !style.columns[0].hasOwnProperty('isString')) 
+			style.columns = style.columns.filter(c => !c.dbName.startsWith("__")).map(c => GridColumn.create(c));
+
+		return style;
+	}
+
 	static createGrid(settings: VGridSettings): any {
 
 		// create a new temp element that Vue will replace with the grid
@@ -63,11 +82,14 @@ export class VGridManager {
 		//mystate.rowsRaw = [];
 		//mystate.rowsPrepared = mystate.rowsRaw;		// dreadfully slow - HAS to be assigned AFTER store is created
 		
-		// if a previous columns state was handed in then apply that
-		if (settings.settings) {
-			debugger;
-			let colsTemp = JSON.parse(settings.settings);
-			mystate.columns = _.map(colsTemp, colitem => GridColumn.create(colitem));
+		// if a style was given then prefer that over any columns collection
+		if (settings.style) {
+			// make sure it is sanitised (converted into proper GridColumns..)
+			var style: any = VGridManager.verifyStyle(settings.style);
+
+			// pass over the columns and groupings
+			mystate.columns = style.columns;		
+			mystate.groupingColumns = style.groupingColumns;
 		}
 		else
 			mystate.columns = settings.columns;

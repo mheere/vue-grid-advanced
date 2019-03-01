@@ -118,14 +118,9 @@ export class VGrid {
 		return obj;
 	}
 	public setStyle(style: any) {
-		// check if incoming style is a serialised style - if so, parse it back to an object
-		if (typeof style === 'string' || style instanceof String)
-			style = JSON.parse(style.toString());
 
-		// if the incoming columns are a serialised set then we need to create 'real' ones first
-		// check if col supports read-only property 'isString', if it does not then create a new GridColumn
-		if (style.columns && style.columns.length > 0 && !style.columns[0].hasOwnProperty('isString')) 
-			style.columns = style.columns.map(c => GridColumn.create(c));	// convert all columns to 'real' ones
+		// sanitise the incoming style
+		var style: any = VGridManager.verifyStyle(style);
 		
 		// pass the style down to the store
 		this.store.dispatch("setStyle", style);

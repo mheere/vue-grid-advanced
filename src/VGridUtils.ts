@@ -207,8 +207,8 @@ export class VGridSettings {
 
 	public showCheckbox: boolean = false;           // if true it will display a checkbox in front of each row allowing for mutiple rows to be selected
 
-	public settings: string = "";					// holds a previous saved columns settings that needs to be applied again
-	public columns: GridColumn[] = [];
+	public style: string = "";						// holds a previous saved style that needs to be applied again
+	public columns: GridColumn[] = [];				// the columns to apply (these are ignored if a style is given)
 	//public adHocData: any;                          // if given this is used to create an ad-hoc column-defs from
   
 	public allowReset: boolean = true;              // if false it will prevent this grid from being Reset by the user (in cases where the grid is constructed through code) 
